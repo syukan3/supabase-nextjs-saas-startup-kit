@@ -1,0 +1,7 @@
+SaaS Starter Kit with Supabase, Next.js, and Stripe
+
+This project is a SaaS starter kit using Supabase, Next.js, and Stripe.
+Please modify the code according to the following rules:
+
+- If the user is not logged in, redirect to the login page.
+- If the user is logged in, redirect to the dashboard.
