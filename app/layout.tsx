@@ -7,8 +7,8 @@ import { I18nProvider } from './i18n-provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Auth Flow with Dashboard',
-  description: 'A simple auth flow with dashboard example',
+  title: 'Next.js + Supabase + Stripe SaaS Starter Kit',
+  description: 'SaaS Starter Kit with Supabase, Next.js, and Stripe',
 }
 
 export default function RootLayout({
