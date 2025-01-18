@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { Menu, ChevronsLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { UserNav } from './user-nav'
 import { NotificationNav } from './notification-nav'
@@ -12,7 +12,7 @@ export default function Header({ isNavOpen, onMenuClick }: { isNavOpen: boolean;
             <nav className="h-full mx-auto px-1 sm:px-2 lg:px-4" aria-label="Top">
                 <div className="flex h-full w-full items-center">
                     <Button variant="ghost" size="icon" className="mr-2" onClick={onMenuClick}>
-                        {isNavOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                        {isNavOpen ? <ChevronsLeft className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                     </Button>
                     <Link href="/dashboard" className="text-xl font-bold text-gray-900 dark:text-white mr-auto">
                         Logo

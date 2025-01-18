@@ -43,7 +43,7 @@ export default function DashboardLayout({
       <Header isNavOpen={isNavOpen} onMenuClick={toggleNav} />
       <div className="flex flex-1 pt-16">
         <Navbar isOpen={isNavOpen} isMinimized={isNavMinimized} onToggle={toggleNavMinimized} />
-        <main className={`flex-grow p-6 transition-all duration-300 ${isNavOpen ? (isNavMinimized ? 'lg:ml-16' : 'lg:ml-56') : ''}`}>
+        <main className={`flex-grow p-8 transition-all duration-300 ${isNavOpen ? (isNavMinimized ? 'lg:ml-16' : 'lg:ml-60') : ''}`}>
           {children}
         </main>
       </div>
