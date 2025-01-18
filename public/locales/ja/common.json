@@ -1,0 +1,44 @@
+{
+    "header": {
+        "home": "ホーム",
+        "dashboard": "ダッシュボード",
+        "pricing": "料金",
+        "login": "ログイン",
+        "signup": "サインアップ",
+        "language": "言語",
+        "profile": "プロフィール",
+        "settings": "設定",
+        "logout": "ログアウト",
+        "security": "セキュリティ設定",
+        "privacy": "プライバシー設定",
+        "notifications": "通知設定",
+        "subscription": "契約プラン",
+        "billing": "請求情報の確認",
+        "usage": "使用量の確認",
+        "help": "ヘルプとサポート",
+        "feedback": "フィードバック",
+        "theme": "テーマ",
+        "themes": {
+            "light": "ライト",
+            "dark": "ダーク",
+            "system": "システム"
+        },
+        "languages": {
+            "ja": "日本語",
+            "en": "English"
+        }
+    },
+    "auth": {
+        "email": "メールアドレス",
+        "password": "パスワード",
+        "forgotPassword": "パスワードを忘れた?",
+        "loginButton": "ログイン",
+        "signupButton": "サインアップ",
+        "resetPassword": "パスワードをリセット"
+    },
+    "landing": {
+        "title": "当サービスへようこそ",
+        "subtitle": "私たちと一緒に旅を始めましょう",
+        "getStarted": "始める"
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "header": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "pricing": "Pricing",
+        "login": "Login",
+        "signup": "Sign Up",
+        "language": "Language",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "security": "Security Settings",
+        "privacy": "Privacy Settings",
+        "notifications": "Notification Settings",
+        "subscription": "Subscription Plan",
+        "billing": "Billing Information",
+        "usage": "Usage Statistics",
+        "help": "Help & Support",
+        "feedback": "Feedback",
+        "theme": "Theme",
+        "themes": {
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        },
+        "languages": {
+            "ja": "Japanese",
+            "en": "English"
+        }
+    },
+    "auth": {
+        "email": "Email",
+        "password": "Password",
+        "forgotPassword": "Forgot Password?",
+        "loginButton": "Login",
+        "signupButton": "Sign Up",
+        "resetPassword": "Reset Password"
+    },
+    "landing": {
+        "title": "Welcome to Our Service",
+        "subtitle": "Start your journey with us",
+        "getStarted": "Get Started"
+    }
+}

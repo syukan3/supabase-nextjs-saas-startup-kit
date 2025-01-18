@@ -16,15 +16,22 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
-import { useState } from 'react'
 import { User, UserCog, Shield, Eye, Bell, CreditCard, Receipt, BarChart3, HelpCircle, MessageSquare, Languages, Palette, LogOut, Sun, Moon, Laptop, Check } from 'lucide-react'
 import { logout } from '@/app/login/actions'
+import { useTranslation } from 'react-i18next'
+import { i18n } from '@/i18n.config'
 
 export function UserNav() {
     const router = useRouter()
     const { setTheme, theme } = useTheme()
+    const { t, i18n: i18nInstance } = useTranslation()
     const email = "user@example.com" // Replace with actual user email
-    const [language, setLanguage] = useState('日本語')
+
+    const handleLanguageChange = (locale: string) => {
+        document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000`
+        i18nInstance.changeLanguage(locale)
+        router.refresh()
+    }
 
     return (
         <DropdownMenu>
@@ -46,49 +53,49 @@ export function UserNav() {
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="py-3">
                         <User className="mr-2 h-4 w-4" />
-                        <span>プロフィール</span>
+                        <span>{t('header.profile')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="py-3">
                         <UserCog className="mr-2 h-4 w-4" />
-                        <span>アカウント設定変更</span>
+                        <span>{t('header.settings')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="py-3">
                         <Shield className="mr-2 h-4 w-4" />
-                        <span>セキュリティ設定</span>
+                        <span>{t('header.security')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="py-3">
                         <Eye className="mr-2 h-4 w-4" />
-                        <span>プライバシー設定</span>
+                        <span>{t('header.privacy')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="py-3">
                         <Bell className="mr-2 h-4 w-4" />
-                        <span>通知設定</span>
+                        <span>{t('header.notifications')}</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="py-3">
                         <CreditCard className="mr-2 h-4 w-4" />
-                        <span>契約プラン</span>
+                        <span>{t('header.subscription')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="py-3">
                         <Receipt className="mr-2 h-4 w-4" />
-                        <span>請求情報の確認</span>
+                        <span>{t('header.billing')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="py-3">
                         <BarChart3 className="mr-2 h-4 w-4" />
-                        <span>使用量の確認</span>
+                        <span>{t('header.usage')}</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="py-3">
                         <HelpCircle className="mr-2 h-4 w-4" />
-                        <span>ヘルプとサポート</span>
+                        <span>{t('header.help')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="py-3">
                         <MessageSquare className="mr-2 h-4 w-4" />
-                        <span>フィードバック</span>
+                        <span>{t('header.feedback')}</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
@@ -96,27 +103,26 @@ export function UserNav() {
                     <DropdownMenuSub>
                         <DropdownMenuSubTrigger className="py-3">
                             <Languages className="mr-2 h-4 w-4" />
-                            <span>言語</span>
+                            <span>{t('header.language')}</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuSubContent>
-                            <DropdownMenuItem onClick={() => setLanguage('English')}>
-                                <div className="w-4 h-4 mr-2 inline-flex items-center justify-center">
-                                    {language === 'English' && <Check className="h-4 w-4" />}
-                                </div>
-                                <span>English</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setLanguage('日本語')}>
-                                <div className="w-4 h-4 mr-2 inline-flex items-center justify-center">
-                                    {language === '日本語' && <Check className="h-4 w-4" />}
-                                </div>
-                                <span>日本語</span>
-                            </DropdownMenuItem>
+                            {i18n.locales.map((locale) => (
+                                <DropdownMenuItem
+                                    key={locale}
+                                    onClick={() => handleLanguageChange(locale)}
+                                >
+                                    <div className="w-4 h-4 mr-2 inline-flex items-center justify-center">
+                                        {i18nInstance.language === locale && <Check className="h-4 w-4" />}
+                                    </div>
+                                    <span>{t(`header.languages.${locale}`)}</span>
+                                </DropdownMenuItem>
+                            ))}
                         </DropdownMenuSubContent>
                     </DropdownMenuSub>
                     <DropdownMenuSub>
                         <DropdownMenuSubTrigger className="py-3">
                             <Palette className="mr-2 h-4 w-4" />
-                            <span>テーマ</span>
+                            <span>{t('header.theme')}</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuSubContent>
                             <DropdownMenuItem onClick={() => setTheme("light")}>
@@ -146,7 +152,7 @@ export function UserNav() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="py-3" onClick={() => logout()}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>ログアウト</span>
+                    <span>{t('header.logout')}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
