@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { resetPassword } from '@/app/login/actions'
 
 export default function ForgotPasswordForm() {
     const [email, setEmail] = useState('')
@@ -18,13 +19,18 @@ export default function ForgotPasswordForm() {
         setIsLoading(true)
         setMessage('')
 
-        // Here you would typically call your API to handle the password reset request
-        // For this example, we'll simulate an API call with a timeout
-        setTimeout(() => {
-            setIsLoading(false)
-            setMessage('If an account exists for ' + email + ', you will receive password reset instructions.')
+        const formData = new FormData()
+        formData.append('email', email)
+
+        try {
+            const result = await resetPassword(formData)
+            setMessage(result.message)
             setEmail('')
-        }, 2000)
+        } catch (error) {
+            setMessage('エラーが発生しました。もう一度お試しください。')
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
