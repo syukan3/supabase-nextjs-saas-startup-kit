@@ -238,7 +238,17 @@
             "daily": "Once a day",
             "weekly": "Once a week"
         },
-        "save": "Save Settings"
+        "save": "Save Settings",
+        "view_all": "View All Notifications",
+        "notifications_title": "Notifications",
+        "description": "Your latest notifications are displayed here",
+        "detail_title": "Notification Details",
+        "detail_description": "Details of the selected notification",
+        "no_notifications": "No notifications",
+        "mark_as_read": "Mark as read",
+        "mark_all_as_read": "Mark all as read",
+        "unread_count": "{{count}} unread notifications",
+        "select_notification": "Please select a notification"
     },
     "privacy_settings": {
         "title": "Privacy Settings",
@@ -289,6 +299,10 @@
         "privacy_settings_saved": {
             "title": "Privacy Settings Saved",
             "description": "Your changes have been applied."
+        },
+        "notification_marked_as_read": {
+            "title": "Notification marked as read",
+            "description": "Selected notification has been marked as read"
         }
     }
 }

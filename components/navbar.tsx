@@ -13,21 +13,6 @@ const navigation = [
         name: 'Dashboard',
         href: '/dashboard',
         icon: LayoutDashboard,
-        subItems: [
-            { name: 'Overview', href: '/dashboard', icon: Home },
-            { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart },
-            { name: 'Reports', href: '/dashboard/reports', icon: FileText },
-        ],
-    },
-    {
-        name: 'User Management',
-        href: '/dashboard/users',
-        icon: Users,
-        subItems: [
-            { name: 'All Users', href: '/dashboard/users', icon: Users },
-            { name: 'Profile', href: '/dashboard/profile', icon: User },
-            { name: 'Settings', href: '/dashboard/settings', icon: Settings },
-        ],
     },
     {
         name: 'Projects',
@@ -37,25 +22,6 @@ const navigation = [
             { name: 'All Projects', href: '/dashboard/projects', icon: Briefcase },
             { name: 'Create New', href: '/dashboard/projects/new', icon: FileText },
         ],
-    },
-    {
-        name: 'Notifications',
-        href: '/dashboard/notifications',
-        icon: Bell,
-    },
-    {
-        name: 'Help & Support',
-        href: '/dashboard/help',
-        icon: HelpCircle,
-        subItems: [
-            { name: 'FAQs', href: '/dashboard/help/faqs', icon: HelpCircle },
-            { name: 'Contact Support', href: '/dashboard/help/contact', icon: FileText },
-        ],
-    },
-    {
-        name: 'Documentation',
-        href: '/dashboard/docs',
-        icon: FileText,
     },
 ]
 
@@ -144,7 +110,7 @@ export function Navbar({ isOpen, isMinimized, onToggle }: { isOpen: boolean; isM
         <nav className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 shadow-sm transition-all duration-300 ${isOpen ? (isMinimized ? 'w-16' : 'w-60') : 'w-0'
             } lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <ScrollArea className="h-full">
-                <div className="space-y-3 py-6">
+                <div className="space-y-4 py-4">
                     {navigation.map((item) => (
                         <NavItem key={item.name} item={item} />
                     ))}

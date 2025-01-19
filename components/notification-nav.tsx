@@ -11,6 +11,8 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 type Notification = {
     id: string
@@ -30,6 +32,7 @@ const dummyNotifications: Notification[] = [
 export function NotificationNav() {
     const [notifications, setNotifications] = useState<Notification[]>(dummyNotifications)
     const [isOpen, setIsOpen] = useState(false)
+    const { t } = useTranslation()
 
     const unreadCount = notifications.filter(n => n.isUnread).length
 
@@ -53,27 +56,42 @@ export function NotificationNav() {
             </SheetTrigger>
             <SheetContent className="w-[400px] sm:w-[540px]">
                 <SheetHeader>
-                    <SheetTitle>Notifications</SheetTitle>
+                    <div className="flex items-center justify-between">
+                        <SheetTitle>{t('notifications.notifications_title')}</SheetTitle>
+                        <Link
+                            href="/notifications"
+                            className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            {t('notifications.view_all')}
+                        </Link>
+                    </div>
                 </SheetHeader>
                 <ScrollArea className="h-[calc(100vh-80px)] mt-6 rounded-md">
-                    {notifications.map((notification) => (
-                        <div
-                            key={notification.id}
-                            className={`mb-4 p-4 rounded-lg ${notification.isUnread
-                                ? 'bg-blue-50 dark:bg-blue-900/20'
-                                : 'bg-gray-50 dark:bg-gray-800/50'
-                                }`}
-                            onClick={() => markAsRead(notification.id)}
-                        >
-                            <h3 className={`text-sm font-semibold ${notification.isUnread ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'
-                                }`}>
-                                {notification.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                {notification.description}
-                            </p>
+                    {notifications.length > 0 ? (
+                        notifications.map((notification) => (
+                            <div
+                                key={notification.id}
+                                className={`mb-4 p-4 rounded-lg ${notification.isUnread
+                                    ? 'bg-blue-50 dark:bg-blue-900/20'
+                                    : 'bg-gray-50 dark:bg-gray-800/50'
+                                    }`}
+                                onClick={() => markAsRead(notification.id)}
+                            >
+                                <h3 className={`text-sm font-semibold ${notification.isUnread ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'
+                                    }`}>
+                                    {notification.title}
+                                </h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    {notification.description}
+                                </p>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="text-center text-gray-500 dark:text-gray-400 py-4">
+                            {t('notifications.no_notifications')}
                         </div>
-                    ))}
+                    )}
                 </ScrollArea>
             </SheetContent>
         </Sheet>

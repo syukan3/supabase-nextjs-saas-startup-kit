@@ -246,7 +246,17 @@
             "daily": "1日1回",
             "weekly": "週1回"
         },
-        "save": "設定を保存"
+        "save": "設定を保存",
+        "view_all": "すべての通知を見る",
+        "notifications_title": "通知",
+        "description": "最新の通知が表示されます",
+        "detail_title": "通知詳細",
+        "detail_description": "選択した通知の詳細が表示されます",
+        "no_notifications": "通知はありません",
+        "mark_as_read": "既読にする",
+        "mark_all_as_read": "すべて既読にする",
+        "unread_count": "{{count}}件の未読通知",
+        "select_notification": "通知を選択してください"
     },
     "privacy_settings": {
         "title": "プライバシー設定",
@@ -297,6 +307,10 @@
         "privacy_settings_saved": {
             "title": "プライバシー設定を保存しました",
             "description": "変更が適用されました。"
+        },
+        "notification_marked_as_read": {
+            "title": "通知を既読にしました",
+            "description": "選択した通知を既読にしました"
         }
     }
 }
