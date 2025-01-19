@@ -74,15 +74,15 @@ export function UserNav() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="py-3">
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/subscription')}>
                         <CreditCard className="mr-2 h-4 w-4" />
                         <span>{t('header.subscription')}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="py-3">
+                    </DropdownMenuItem >
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/billing')}>
                         <Receipt className="mr-2 h-4 w-4" />
                         <span>{t('header.billing')}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="py-3">
+                    </DropdownMenuItem >
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/usage')}>
                         <BarChart3 className="mr-2 h-4 w-4" />
                         <span>{t('header.usage')}</span>
                     </DropdownMenuItem>

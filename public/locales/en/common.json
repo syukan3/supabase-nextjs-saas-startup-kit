@@ -40,5 +40,73 @@
         "title": "Welcome to Our Service",
         "subtitle": "Start your journey with us",
         "getStarted": "Get Started"
+    },
+    "subscription": {
+        "title": "Subscription Plan",
+        "plans": {
+            "basic": {
+                "name": "Basic",
+                "description": "For individuals and small teams",
+                "features": [
+                    "5 projects",
+                    "10GB storage",
+                    "Basic support"
+                ]
+            },
+            "pro": {
+                "name": "Pro",
+                "description": "For growing businesses",
+                "features": [
+                    "Unlimited projects",
+                    "100GB storage",
+                    "Priority support",
+                    "Advanced analytics"
+                ]
+            },
+            "enterprise": {
+                "name": "Enterprise",
+                "description": "For large organizations",
+                "features": [
+                    "Custom solutions",
+                    "Dedicated support",
+                    "On-premise options",
+                    "SLA guarantees"
+                ]
+            }
+        },
+        "select_plan": "Select Plan"
+    },
+    "billing": {
+        "title": "Billing Information",
+        "payment_method": {
+            "title": "Payment Method",
+            "description": "Current payment method details",
+            "card_info": "Visa ending in 4242",
+            "expiry": "Expires: 12/2024",
+            "change_button": "Change Payment Method"
+        },
+        "history": {
+            "title": "Billing History",
+            "description": "Past invoices and payments"
+        }
+    },
+    "usage": {
+        "title": "Usage Statistics",
+        "monthly": {
+            "title": "Monthly Usage",
+            "description": "Usage statistics for the past 7 months"
+        },
+        "summary": {
+            "title": "Usage Summary",
+            "description": "Current usage status",
+            "storage": {
+                "title": "Storage Usage",
+                "value": "45.5 GB / 100 GB"
+            },
+            "api": {
+                "title": "API Requests",
+                "value": "87,429 / 100,000"
+            }
+        }
     }
 }

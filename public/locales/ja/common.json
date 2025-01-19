@@ -40,5 +40,82 @@
         "title": "当サービスへようこそ",
         "subtitle": "私たちと一緒に旅を始めましょう",
         "getStarted": "始める"
+    },
+    "subscription": {
+        "title": "契約プラン",
+        "plans": {
+            "basic": {
+                "name": "ベーシック",
+                "description": "個人や小規模チーム向け",
+                "features": [
+                    "5つのプロジェクト",
+                    "10GBストレージ",
+                    "基本サポート"
+                ]
+            },
+            "pro": {
+                "name": "プロ",
+                "description": "成長中のビジネス向け",
+                "features": [
+                    "無制限のプロジェクト",
+                    "100GBストレージ",
+                    "優先サポート",
+                    "高度な分析機能"
+                ]
+            },
+            "enterprise": {
+                "name": "エンタープライズ",
+                "description": "大規模組織向け",
+                "features": [
+                    "カスタムソリューション",
+                    "専任サポート",
+                    "オンプレミスオプション",
+                    "SLA保証"
+                ]
+            }
+        },
+        "select_plan": "プランを選択"
+    },
+    "billing": {
+        "title": "請求情報",
+        "payment_method": {
+            "title": "支払い方法",
+            "description": "現在の支払い方法の詳細",
+            "card_info": "Visa（末尾番号：4242）",
+            "expiry": "有効期限：12/2024",
+            "change_button": "支払い方法を変更"
+        },
+        "history": {
+            "title": "請求履歴",
+            "description": "過去の請求書と支払い"
+        }
+    },
+    "usage": {
+        "title": "使用量の確認",
+        "monthly": {
+            "title": "月別使用量",
+            "description": "過去7ヶ月間の使用量統計",
+            "months": {
+                "1": "1月",
+                "2": "2月",
+                "3": "3月",
+                "4": "4月",
+                "5": "5月",
+                "6": "6月",
+                "7": "7月"
+            }
+        },
+        "summary": {
+            "title": "使用量サマリー",
+            "description": "現在の使用状況",
+            "storage": {
+                "title": "ストレージ使用量",
+                "value": "45.5 GB / 100 GB"
+            },
+            "api": {
+                "title": "APIリクエスト数",
+                "value": "87,429 / 100,000"
+            }
+        }
     }
 }
