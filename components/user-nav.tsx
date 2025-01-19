@@ -89,11 +89,11 @@ export function UserNav() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="py-3">
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/help')}>
                         <HelpCircle className="mr-2 h-4 w-4" />
                         <span>{t('header.help')}</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="py-3">
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/feedback')}>
                         <MessageSquare className="mr-2 h-4 w-4" />
                         <span>{t('header.feedback')}</span>
                     </DropdownMenuItem>

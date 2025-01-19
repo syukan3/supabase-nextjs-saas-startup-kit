@@ -108,5 +108,63 @@
                 "value": "87,429 / 100,000"
             }
         }
+    },
+    "help": {
+        "title": "Help & Support",
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "description": "Common questions and answers",
+            "questions": {
+                "cancel_subscription": {
+                    "question": "How do I cancel my subscription?",
+                    "answer": "Go to the Subscription section in your Account Settings, click the 'Cancel' button. Select your reason for cancellation and confirm to complete the process."
+                },
+                "payment_method": {
+                    "question": "Can I change my payment method?",
+                    "answer": "Yes, you can. Go to the Payment Method section in your Billing page, click 'Edit', and enter your new credit card information to update."
+                },
+                "add_users": {
+                    "question": "How do I add other users to my account?",
+                    "answer": "From the Team Management page, click 'Invite Members' and enter the email addresses of the people you want to invite. They'll receive an invitation email and will be added once they accept."
+                },
+                "export_data": {
+                    "question": "Can I export my data?",
+                    "answer": "Yes, you can. Go to the Data Management section in Settings and select 'Export Data'. You can download your data in CSV or JSON format."
+                },
+                "two_factor": {
+                    "question": "How do I set up two-factor authentication?",
+                    "answer": "Go to the Two-Factor Authentication section in Security Settings and click 'Enable'. Follow the on-screen instructions to complete the setup. You'll typically need to install an authenticator app."
+                }
+            }
+        },
+        "support": {
+            "title": "Contact Support",
+            "description": "If you have any other questions, please contact our support team.",
+            "hours": "Support team hours: Weekdays 9:00 - 18:00 (JST)",
+            "contact_button": "Contact Support",
+            "docs_button": "View Documentation"
+        }
+    },
+    "feedback": {
+        "title": "Feedback",
+        "form": {
+            "title": "Send Feedback",
+            "description": "Please share your thoughts to help us improve our service.",
+            "type": {
+                "label": "Feedback Type",
+                "general": "General Feedback",
+                "bug": "Bug Report",
+                "feature": "Feature Request"
+            },
+            "content": {
+                "label": "Feedback Content",
+                "placeholder": "Enter your feedback here..."
+            },
+            "submit": "Submit",
+            "success": {
+                "title": "Feedback Submitted",
+                "description": "Thank you for your feedback."
+            }
+        }
     }
 }
