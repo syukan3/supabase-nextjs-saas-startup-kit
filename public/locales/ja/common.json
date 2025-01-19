@@ -7,11 +7,11 @@
         "signup": "サインアップ",
         "language": "言語",
         "profile": "プロフィール",
-        "settings": "設定",
+        "user-settings": "ユーザー設定",
         "logout": "ログアウト",
         "security": "セキュリティ設定",
-        "privacy": "プライバシー設定",
-        "notifications": "通知設定",
+        "privacy-settings": "プライバシー設定",
+        "notification-settings": "通知設定",
         "subscription": "契約プラン",
         "billing": "請求情報の確認",
         "usage": "使用量の確認",
@@ -174,6 +174,129 @@
                 "title": "フィードバックを送信しました",
                 "description": "ご意見ありがとうございます。"
             }
+        }
+    },
+    "profile": {
+        "title": "プロフィール",
+        "info": {
+            "title": "プロフィール情報",
+            "description": "あなたの公開プロフィール情報を管理します。",
+            "upload_image": "画像をアップロード",
+            "name": "名前",
+            "email": "メールアドレス",
+            "bio": "自己紹介",
+            "save": "変更を保存"
+        }
+    },
+    "user-settings": {
+        "title": "ユーザー設定",
+        "general": {
+            "title": "一般設定",
+            "description": "アカウントの基本設定を管理します。",
+            "email_notifications": "メール通知",
+            "marketing_emails": "マーケティングメール",
+            "language": "言語",
+            "timezone": "タイムゾーン",
+            "save": "設定を保存"
+        }
+    },
+    "security": {
+        "title": "セキュリティ設定",
+        "password": {
+            "title": "パスワード変更",
+            "description": "定期的にパスワードを変更することをおすすめします。",
+            "current": "現在のパスワード",
+            "new": "新しいパスワード",
+            "confirm": "新しいパスワード（確認）",
+            "change": "パスワードを変更"
+        },
+        "two_factor": {
+            "title": "二段階認証",
+            "description": "アカウントのセキュリティを強化します。",
+            "enable": "二段階認証を有効にする"
+        }
+    },
+    "privacy": {
+        "title": "プライバシーポリシー",
+        "sections": {
+            "collect": {
+                "title": "1. 収集する情報",
+                "content": "当社は、アカウントの作成や変更、サービスのリクエスト、カスタマーサポートへの連絡など、お客様が直接提供する情報を収集します。"
+            },
+            "use": {
+                "title": "2. 情報の使用方法",
+                "content": "収集した情報は、サービスの提供、維持、改善、新サービスの開発、および当社とユーザーの保護のために使用されます。"
+            }
+        }
+    },
+    "notifications": {
+        "title": "通知設定",
+        "channels": {
+            "title": "通知チャンネル",
+            "description": "通知を受け取る方法を選択します。",
+            "email": "メール通知",
+            "push": "プッシュ通知",
+            "sms": "SMS通知"
+        },
+        "frequency": {
+            "title": "通知頻度",
+            "description": "通知を受け取る頻度を設定します。",
+            "select": "通知頻度を選択",
+            "realtime": "リアルタイム",
+            "daily": "1日1回",
+            "weekly": "週1回"
+        },
+        "save": "設定を保存"
+    },
+    "privacy_settings": {
+        "title": "プライバシー設定",
+        "profile_visibility": {
+            "title": "プロフィールの可視性",
+            "description": "プロフィールの公開範囲を設定します。",
+            "options": {
+                "public": "公開",
+                "private": "非公開",
+                "friends": "友達のみ"
+            }
+        },
+        "activity_tracking": {
+            "title": "アクティビティトラッキング",
+            "description": "サービス内でのアクティビティの追跡を管理します。",
+            "enable": "アクティビティトラッキングを有効にする"
+        },
+        "data_sharing": {
+            "title": "データ共有",
+            "description": "サードパーティとのデータ共有を管理します。",
+            "enable": "サードパーティとデータを共有する"
+        },
+        "save": "設定を保存"
+    },
+    "toast": {
+        "profile_updated": {
+            "title": "プロフィールを更新しました",
+            "description": "変更が保存されました。"
+        },
+        "settings_saved": {
+            "title": "設定を保存しました",
+            "description": "変更が適用されました。"
+        },
+        "password_changed": {
+            "title": "パスワードを変更しました",
+            "description": "新しいパスワードが設定されました。"
+        },
+        "two_factor_toggled": {
+            "title": "二段階認証を{status}にしました",
+            "description": "二段階認証が{status}になりました。",
+            "enabled": "有効",
+            "disabled": "無効"
+        },
+        "notification_saved": {
+            "title": "通知設定を保存しました",
+            "description": "変更が適用されました。"
+        },
+        "privacy_settings_saved": {
+            "title": "プライバシー設定を保存しました",
+            "description": "変更が適用されました。"
         }
     }
 }

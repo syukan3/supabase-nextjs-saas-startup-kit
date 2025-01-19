@@ -51,28 +51,28 @@ export function UserNav() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="py-3">
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/profile')}>
                         <User className="mr-2 h-4 w-4" />
                         <span>{t('header.profile')}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="py-3">
+                    </DropdownMenuItem >
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/user-settings')}>
                         <UserCog className="mr-2 h-4 w-4" />
-                        <span>{t('header.settings')}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="py-3">
+                        <span>{t('header.user-settings')}</span>
+                    </DropdownMenuItem >
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/security')}>
                         <Shield className="mr-2 h-4 w-4" />
                         <span>{t('header.security')}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="py-3">
+                    </DropdownMenuItem >
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/privacy-settings')}>
                         <Eye className="mr-2 h-4 w-4" />
-                        <span>{t('header.privacy')}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="py-3">
+                        <span>{t('header.privacy-settings')}</span>
+                    </DropdownMenuItem >
+                    <DropdownMenuItem className="py-3" onClick={() => router.push('/notification-settings')}>
                         <Bell className="mr-2 h-4 w-4" />
-                        <span>{t('header.notifications')}</span>
-                    </DropdownMenuItem>
+                        <span>{t('header.notification-settings')}</span>
+                    </DropdownMenuItem >
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator/>
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="py-3" onClick={() => router.push('/subscription')}>
                         <CreditCard className="mr-2 h-4 w-4" />
