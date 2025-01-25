@@ -25,7 +25,7 @@ const navigation = [
     },
 ]
 
-export function Navbar({ isOpen, isMinimized, onToggle }: { isOpen: boolean; isMinimized: boolean; onToggle: () => void }) {
+export function Navbar({ isOpen, isMinimized, onToggle, isInitialRender }: { isOpen: boolean; isMinimized: boolean; onToggle: () => void; isInitialRender: boolean }) {
     const pathname = usePathname()
     const [openItems, setOpenItems] = useState<string[]>([])
 
@@ -107,8 +107,7 @@ export function Navbar({ isOpen, isMinimized, onToggle }: { isOpen: boolean; isM
     }
 
     return (
-        <nav className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 shadow-sm transition-all duration-300 ${isOpen ? (isMinimized ? 'w-16' : 'w-60') : 'w-0'
-            } lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <nav className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 shadow-sm ${!isInitialRender ? 'transition-all duration-300' : ''} ${isOpen ? (isMinimized ? 'w-16' : 'w-60') : 'w-0'} lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <ScrollArea className="h-full">
                 <div className="space-y-4 py-4">
                     {navigation.map((item) => (

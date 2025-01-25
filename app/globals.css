@@ -89,6 +89,12 @@ header {
 }
 
 /* Add these new styles for the navbar */
+/* Ensure tooltips are above other elements */
+.tooltip {
+  z-index: 1002 !important;
+}
+
+/* Add these new styles for the navbar */
 .navbar-transition {
   transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
@@ -97,9 +103,4 @@ header {
   .navbar-closed {
     transform: translateX(-100%);
   }
-}
-
-/* Ensure tooltips are above other elements */
-.tooltip {
-  z-index: 1002 !important;
 }

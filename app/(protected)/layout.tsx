@@ -12,12 +12,15 @@ export default function ProtectedLayout({
     const [isNavOpen, setIsNavOpen] = useState(false)
     const [isNavMinimized, setIsNavMinimized] = useState(false)
     const [isSmallScreen, setIsSmallScreen] = useState(false)
+    const [isInitialRender, setIsInitialRender] = useState(true)
 
     const toggleNav = () => {
+        setIsInitialRender(false)
         setIsNavOpen(!isNavOpen)
     }
 
     const toggleNavMinimized = () => {
+        setIsInitialRender(false)
         setIsNavMinimized(!isNavMinimized)
     }
 
@@ -42,8 +45,8 @@ export default function ProtectedLayout({
         <div className="min-h-screen flex flex-col">
             <Header isNavOpen={isNavOpen} onMenuClick={toggleNav} />
             <div className="flex flex-1 pt-16">
-                <Navbar isOpen={isNavOpen} isMinimized={isNavMinimized} onToggle={toggleNavMinimized} />
-                <main className={`flex-grow p-8 transition-all duration-300 ${isNavOpen ? (isNavMinimized ? 'lg:ml-16' : 'lg:ml-60') : ''}`}>
+                <Navbar isOpen={isNavOpen} isMinimized={isNavMinimized} onToggle={toggleNavMinimized} isInitialRender={isInitialRender} />
+                <main className={`flex-grow p-8 ${!isInitialRender ? 'transition-all duration-300' : ''} ${isNavOpen ? (isNavMinimized ? 'lg:ml-16' : 'lg:ml-60') : ''}`}>
                     {children}
                 </main>
             </div>
