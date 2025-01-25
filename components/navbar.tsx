@@ -85,7 +85,7 @@ export function Navbar({ isOpen, isMinimized, onToggle, isInitialRender }: { isO
                             ) : (
                                 <Link
                                     href={item.href}
-                                    className={`flex items-center px-6 py-3 text-sm font-medium transition-all duration-200 ${isActive
+                                    className={`flex items-center px-6 py-3 text-sm font-medium transition-all duration-200 cursor-pointer ${isActive
                                         ? 'bg-gray-100 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
                                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                         } ${depth > 0 ? 'pl-10' : ''}`}
