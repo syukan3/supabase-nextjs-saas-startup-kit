@@ -3,8 +3,16 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2023-10-16",
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error("STRIPE_SECRET_KEY is not set");
+}
+
+if (!process.env.NEXT_PUBLIC_SITE_URL) {
+  throw new Error("NEXT_PUBLIC_SITE_URL is not set");
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2025-01-27.acacia",
 });
 
 export async function POST(request: Request) {
@@ -23,10 +31,10 @@ export async function POST(request: Request) {
 
     const { planId } = await request.json();
 
-    // planIdに基づいてDBからstripe_price_idを取得
+    // planIdに基づいてDBからstripe_price_idとmetadataを取得
     const { data: planData, error: planError } = await supabase
       .from("subscription_plans")
-      .select("stripe_price_id")
+      .select("stripe_price_id, metadata")
       .eq("id", planId)
       .single();
 
@@ -34,6 +42,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "プランが見つかりません" },
         { status: 404 }
+      );
+    }
+
+    // メタデータの存在チェック
+    if (!planData.metadata?.price || !planData.metadata?.currency) {
+      return NextResponse.json(
+        { error: "プランのメタデータが不正です" },
+        { status: 400 }
       );
     }
 
@@ -80,11 +96,12 @@ export async function POST(request: Request) {
         },
       ],
       mode: "subscription",
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/plans`,
+      success_url: new URL("/dashboard", process.env.NEXT_PUBLIC_SITE_URL).toString() + "?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: new URL("/subscription", process.env.NEXT_PUBLIC_SITE_URL).toString(),
       subscription_data: {
         metadata: {
           supabase_user_id: session.user.id,
+          plan_id: planId,
         },
       },
     });
