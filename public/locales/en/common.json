@@ -304,5 +304,11 @@
             "title": "Notification marked as read",
             "description": "Selected notification has been marked as read"
         }
+    },
+    "stripe": {
+        "disabled": {
+            "title": "Subscription Feature is Currently Disabled",
+            "message": "This feature is currently unavailable. Please contact your administrator."
+        }
     }
 }

@@ -10,8 +10,22 @@ import type { SubscriptionPlan } from "@/types/subscription";
 import { getSubscriptionPlans, formatPrice } from "@/lib/subscription";
 import { Skeleton } from "@/components/ui/skeleton";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { isStripeEnabled } from '@/utils/stripe';
+import { useTranslation } from 'react-i18next';
 
 export default function SubscriptionPage() {
+    if (!isStripeEnabled()) {
+        const { t } = useTranslation();
+        return (
+            <div className="container mx-auto px-4 py-8">
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold mb-4">{t('stripe.disabled.title')}</h1>
+                    <p>{t('stripe.disabled.message')}</p>
+                </div>
+            </div>
+        );
+    }
+
     const router = useRouter();
     const [loading, setLoading] = useState<string | null>(null);
     const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
