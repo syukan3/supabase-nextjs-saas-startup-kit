@@ -6,15 +6,38 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
   
   const { data: plans, error } = await supabase
     .from('subscription_plans')
-    .select('*')
-    .order('price', { ascending: true });
+    .select(`
+      id,
+      name,
+      stripe_price_id,
+      interval,
+      interval_count,
+      trial_period_days,
+      metadata,
+      created_at
+    `)
+    .order('created_at', { ascending: true });
 
   if (error) {
     console.error('Error fetching subscription plans:', error);
     throw error;
   }
 
-  return plans || [];
+  // Transform the data to match the SubscriptionPlan type
+  const transformedPlans: SubscriptionPlan[] = plans?.map(plan => ({
+    id: plan.id,
+    name: plan.name,
+    description: plan.metadata?.description || '',
+    price: plan.metadata?.price || 0,
+    currency: plan.metadata?.currency || 'USD',
+    interval: plan.interval,
+    stripe_price_id: plan.stripe_price_id,
+    features: plan.metadata?.features || [],
+    created_at: plan.created_at,
+    updated_at: plan.created_at
+  })) || [];
+
+  return transformedPlans;
 }
 
 export function formatPrice(price: number, currency: string, locale: string): string {
