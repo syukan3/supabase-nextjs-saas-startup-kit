@@ -183,15 +183,20 @@
     },
     "profile": {
         "title": "Profile",
-        "info": {
-            "title": "Profile Information",
-            "description": "Manage your public profile information.",
-            "upload_image": "Upload Image",
-            "name": "Name",
-            "email": "Email",
-            "bio": "Bio",
-            "save": "Save Changes"
-        }
+        "basic_info": "Basic Information",
+        "basic_info_desc": "Edit your profile information",
+        "avatar": "Profile Picture",
+        "avatar_desc": "Click to upload an image",
+        "email": "Email Address",
+        "full_name": "Full Name",
+        "display_name": "Display Name",
+        "bio": "Bio",
+        "website": "Website",
+        "fetch_error": "Failed to fetch profile",
+        "update_success": "Profile updated successfully",
+        "update_error": "Failed to update profile",
+        "avatar_update_success": "Profile picture updated successfully",
+        "avatar_update_error": "Failed to update profile picture"
     },
     "user-settings": {
         "title": "User Settings",
@@ -316,6 +321,12 @@
         "notification_marked_as_read": {
             "title": "Notification marked as read",
             "description": "Selected notification has been marked as read"
-        }
+        },
+        "success": "Success",
+        "error": "Error"
+    },
+    "common": {
+        "saving": "Saving...",
+        "save_changes": "Save Changes"
     }
 }
