@@ -34,7 +34,20 @@
         "forgotPassword": "パスワードを忘れた?",
         "loginButton": "ログイン",
         "signupButton": "サインアップ",
-        "resetPassword": "パスワードをリセット"
+        "resetPassword": "パスワードをリセット",
+        "welcomeBack": "おかえりなさい",
+        "createAccount": "アカウントを作成",
+        "signInMessage": "アカウントにログインしてください",
+        "signUpMessage": "アカウントを作成してください",
+        "noAccount": "アカウントをお持ちでない方",
+        "haveAccount": "すでにアカウントをお持ちの方",
+        "termsMessage": "このサービスを利用することで、以下に同意したことになります",
+        "termsLink": "利用規約",
+        "andText": "および",
+        "privacyLink": "プライバシーポリシー",
+        "continueWith": "または以下で続ける",
+        "signInWithGoogle": "Googleでログイン",
+        "signUpWithGoogle": "Googleでサインアップ"
     },
     "landing": {
         "title": "当サービスへようこそ",

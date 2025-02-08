@@ -35,7 +35,20 @@
         "forgotPassword": "Forgot Password?",
         "loginButton": "Login",
         "signupButton": "Sign Up",
-        "resetPassword": "Reset Password"
+        "resetPassword": "Reset Password",
+        "welcomeBack": "Welcome back",
+        "createAccount": "Create an account",
+        "signInMessage": "Please sign in to your account",
+        "signUpMessage": "Please sign up for an account",
+        "noAccount": "Don't have an account?",
+        "haveAccount": "Already have an account?",
+        "termsMessage": "By using this service, you agree to our",
+        "termsLink": "Terms of Service",
+        "andText": "and",
+        "privacyLink": "Privacy Policy",
+        "continueWith": "Or continue with",
+        "signInWithGoogle": "Sign in with Google",
+        "signUpWithGoogle": "Sign up with Google"
     },
     "landing": {
         "title": "Welcome to Our Service",
