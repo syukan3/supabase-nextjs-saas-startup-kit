@@ -39,21 +39,18 @@ export const SubscriptionUpdatePayloadSchema = z.object({
     cancel_at_period_end: z.boolean().optional(),
 });
 
-export interface SubscriptionPlan {
+export type SubscriptionPlan = {
     id: string;
     name: string;
-    description?: string;
-    stripe_price_id: string;
-    interval: 'day' | 'week' | 'month' | 'year';
-    interval_count: number;
-    trial_period_days?: number;
-    amount: number;
+    description: string;
+    price: number;
     currency: string;
-    features?: string[];
-    metadata?: Record<string, any>;
+    interval: 'month' | 'year';
+    stripe_price_id: string;
+    features: string[];
     created_at: string;
-    is_active?: boolean;
-}
+    updated_at: string;
+};
 
 export const SubscriptionPlanSchema = z.object({
     id: z.string(),
