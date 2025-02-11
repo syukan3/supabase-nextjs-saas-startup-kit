@@ -5,3 +5,10 @@ Please modify the code according to the following rules:
 
 - If the user is not logged in, redirect to the login page.
 - If the user is logged in, redirect to the dashboard.
+- Use the existing system for i18n.
+- Use the existing system for Stripe.
+- Use the existing system for Supabase.
+- Use the existing system for Next.js.
+- Use the existing system for Tailwind CSS.
+- Use the existing system for Shadcn UI.
+- Use the existing system for React.
