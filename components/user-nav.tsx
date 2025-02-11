@@ -20,14 +20,26 @@ import { User, UserCog, Shield, Eye, Bell, CreditCard, Receipt, BarChart3, HelpC
 import { logout } from '@/app/login/actions'
 import { useTranslation } from 'react-i18next'
 import { i18n } from '@/i18n.config'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/utils/supabase/client'
 import { isStripeEnabled } from '@/utils/stripe'
-import Link from 'next/link'
 
 export function UserNav() {
     const router = useRouter()
     const { setTheme, theme } = useTheme()
     const { t, i18n: i18nInstance } = useTranslation()
-    const email = "user@example.com" // Replace with actual user email
+    const [email, setEmail] = useState<string>('')
+
+    useEffect(() => {
+        const fetchUserEmail = async () => {
+            const supabase = createClient()
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+                setEmail(user.email || '')
+            }
+        }
+        fetchUserEmail()
+    }, [])
 
     const handleLanguageChange = (locale: string) => {
         document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000`

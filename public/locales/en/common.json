@@ -35,7 +35,20 @@
         "forgotPassword": "Forgot Password?",
         "loginButton": "Login",
         "signupButton": "Sign Up",
-        "resetPassword": "Reset Password"
+        "resetPassword": "Reset Password",
+        "welcomeBack": "Welcome back",
+        "createAccount": "Create an account",
+        "signInMessage": "Please sign in to your account",
+        "signUpMessage": "Please sign up for an account",
+        "noAccount": "Don't have an account?",
+        "haveAccount": "Already have an account?",
+        "termsMessage": "By using this service, you agree to our",
+        "termsLink": "Terms of Service",
+        "andText": "and",
+        "privacyLink": "Privacy Policy",
+        "continueWith": "Or continue with",
+        "signInWithGoogle": "Sign in with Google",
+        "signUpWithGoogle": "Sign up with Google"
     },
     "landing": {
         "title": "Welcome to Our Service",
@@ -170,15 +183,20 @@
     },
     "profile": {
         "title": "Profile",
-        "info": {
-            "title": "Profile Information",
-            "description": "Manage your public profile information.",
-            "upload_image": "Upload Image",
-            "name": "Name",
-            "email": "Email",
-            "bio": "Bio",
-            "save": "Save Changes"
-        }
+        "basic_info": "Basic Information",
+        "basic_info_desc": "Edit your profile information",
+        "avatar": "Profile Picture",
+        "avatar_desc": "Click to upload an image",
+        "email": "Email Address",
+        "full_name": "Full Name",
+        "display_name": "Display Name",
+        "bio": "Bio",
+        "website": "Website",
+        "fetch_error": "Failed to fetch profile",
+        "update_success": "Profile updated successfully",
+        "update_error": "Failed to update profile",
+        "avatar_update_success": "Profile picture updated successfully",
+        "avatar_update_error": "Failed to update profile picture"
     },
     "user-settings": {
         "title": "User Settings",
@@ -303,7 +321,9 @@
         "notification_marked_as_read": {
             "title": "Notification marked as read",
             "description": "Selected notification has been marked as read"
-        }
+        },
+        "success": "Success",
+        "error": "Error"
     },
     "stripe": {
         "disabled": {
@@ -328,6 +348,10 @@
             "name": "Enterprise",
             "description": "Custom solutions for large organizations"
         }
+    },
+    "common": {
+        "saving": "Saving...",
+        "save_changes": "Save Changes"
     },
     "errors": {
         "loadingPlans": "Failed to load subscription plans",

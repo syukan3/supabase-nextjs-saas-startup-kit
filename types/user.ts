@@ -11,6 +11,18 @@ export interface User {
     last_login?: string;
 }
 
+export interface UserProfile {
+    id: string;
+    email: string;
+    full_name: string;
+    display_name: string;
+    avatar_url: string;
+    bio: string;
+    website: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
 export const UserSchema = z.object({
     id: z.string(),
     email: z.string().email(),
@@ -22,21 +34,17 @@ export const UserSchema = z.object({
     last_login: z.string().optional(),
 });
 
-export interface UserProfile extends User {
-    full_name?: string;
-    avatar_url?: string;
-    display_name?: string;
-    bio?: string;
-    website?: string;
-}
-
 export const UserProfileSchema = z.object({
-    full_name: z.string().optional(),
-    avatar_url: z.string().optional(),
-    display_name: z.string().optional(),
-    bio: z.string().optional(),
-    website: z.string().optional(),
-}).merge(UserSchema);
+    id: z.string(),
+    email: z.string().email(),
+    full_name: z.string(),
+    display_name: z.string(),
+    avatar_url: z.string(),
+    bio: z.string(),
+    website: z.string(),
+    created_at: z.string().optional(),
+    updated_at: z.string().optional(),
+});
 
 export interface UserSettings {
     user_id: string;

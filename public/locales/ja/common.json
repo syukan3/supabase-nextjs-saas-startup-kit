@@ -34,7 +34,20 @@
         "forgotPassword": "パスワードを忘れた?",
         "loginButton": "ログイン",
         "signupButton": "サインアップ",
-        "resetPassword": "パスワードをリセット"
+        "resetPassword": "パスワードをリセット",
+        "welcomeBack": "おかえりなさい",
+        "createAccount": "アカウントを作成",
+        "signInMessage": "アカウントにログインしてください",
+        "signUpMessage": "アカウントを作成してください",
+        "noAccount": "アカウントをお持ちでない方",
+        "haveAccount": "すでにアカウントをお持ちの方",
+        "termsMessage": "このサービスを利用することで、以下に同意したことになります",
+        "termsLink": "利用規約",
+        "andText": "および",
+        "privacyLink": "プライバシーポリシー",
+        "continueWith": "または以下で続ける",
+        "signInWithGoogle": "Googleでログイン",
+        "signUpWithGoogle": "Googleでサインアップ"
     },
     "landing": {
         "title": "当サービスへようこそ",
@@ -178,15 +191,20 @@
     },
     "profile": {
         "title": "プロフィール",
-        "info": {
-            "title": "プロフィール情報",
-            "description": "あなたの公開プロフィール情報を管理します。",
-            "upload_image": "画像をアップロード",
-            "name": "名前",
-            "email": "メールアドレス",
-            "bio": "自己紹介",
-            "save": "変更を保存"
-        }
+        "basic_info": "基本情報",
+        "basic_info_desc": "プロフィール情報を編集できます",
+        "avatar": "プロフィール画像",
+        "avatar_desc": "クリックして画像をアップロード",
+        "email": "メールアドレス",
+        "full_name": "氏名",
+        "display_name": "表示名",
+        "bio": "自己紹介",
+        "website": "ウェブサイト",
+        "fetch_error": "プロフィールの取得に失敗しました",
+        "update_success": "プロフィールを更新しました",
+        "update_error": "プロフィールの更新に失敗しました",
+        "avatar_update_success": "プロフィール画像を更新しました",
+        "avatar_update_error": "プロフィール画像の更新に失敗しました"
     },
     "user-settings": {
         "title": "ユーザー設定",
@@ -311,7 +329,9 @@
         "notification_marked_as_read": {
             "title": "通知を既読にしました",
             "description": "選択した通知を既読にしました"
-        }
+        },
+        "success": "成功",
+        "error": "エラー"
     },
     "stripe": {
         "disabled": {
@@ -342,5 +362,9 @@
         "checkoutSession": "チェックアウトセッションの作成に失敗しました",
         "generalError": "エラーが発生しました",
         "retry": "再試行"
+    },
+    "common": {
+        "saving": "保存中...",
+        "save_changes": "変更を保存"
     }
 }
