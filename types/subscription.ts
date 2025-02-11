@@ -49,7 +49,10 @@ export type SubscriptionPlan = {
     trial_period_days?: number;
     amount: number;
     currency: string;
-    features?: string[];
+    features?: {
+        ja: string[];
+        en: string[];
+    };
     metadata?: Record<string, any>;
     created_by: string;
     updated_by: string;
@@ -68,7 +71,10 @@ export const SubscriptionPlanSchema = z.object({
     trial_period_days: z.number().optional(),
     amount: z.number(),
     currency: z.string(),
-    features: z.array(z.string()).optional(),
+    features: z.object({
+        ja: z.array(z.string()),
+        en: z.array(z.string())
+    }).optional(),
     metadata: z.record(z.any()).optional(),
     created_by: z.string(),
     updated_by: z.string(),

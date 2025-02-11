@@ -12,9 +12,15 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
       stripe_price_id,
       interval,
       interval_count,
+      amount,
+      currency,
       trial_period_days,
+      features,
       metadata,
-      created_at
+      created_by,
+      updated_by,
+      created_at,
+      updated_at
     `)
     .order('created_at', { ascending: true });
 
@@ -30,11 +36,11 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
     description: plan.metadata?.description || '',
     interval_count: plan.interval_count,
     trial_period_days: plan.trial_period_days,
-    amount: plan.metadata?.price || 0,
-    currency: plan.metadata?.currency || 'USD',
+    amount: plan.amount || 0,
+    currency: plan.currency || 'USD',
     interval: plan.interval,
     stripe_price_id: plan.stripe_price_id,
-    features: plan.metadata?.features || [],
+    features: plan.features || [],
     created_by: '',
     updated_by: '',
     severity: 1,

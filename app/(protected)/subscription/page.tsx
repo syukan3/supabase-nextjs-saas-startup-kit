@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { getTranslations, getSupportedLocales } from "@/lib/i18n";
-import type { Dictionary, Locale } from "@/lib/i18n/types";
 import type { SubscriptionPlan } from "@/types/subscription";
 import { getSubscriptionPlans, formatPrice } from "@/lib/subscription";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,8 +12,9 @@ import { isStripeEnabled } from '@/utils/stripe';
 import { useTranslation } from 'react-i18next';
 
 export default function SubscriptionPage() {
+    const { t, i18n } = useTranslation();
+
     if (!isStripeEnabled()) {
-        const { t } = useTranslation();
         return (
             <div className="container mx-auto px-4 py-8">
                 <div className="text-center">
@@ -31,16 +30,13 @@ export default function SubscriptionPage() {
     const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [locale, setLocale] = useState<Locale>("ja");
-    
-    const t = getTranslations(locale) as Dictionary;
 
     useEffect(() => {
         async function initializeLocale() {
             try {
                 const supabase = createClientComponentClient();
                 const { data: { session } } = await supabase.auth.getSession();
-                
+
                 if (session?.user) {
                     const { data: userSettings } = await supabase
                         .from('user_settings')
@@ -49,18 +45,8 @@ export default function SubscriptionPage() {
                         .single();
 
                     if (userSettings?.language) {
-                        const supportedLocales = getSupportedLocales();
-                        if (supportedLocales.includes(userSettings.language as Locale)) {
-                            setLocale(userSettings.language as Locale);
-                            return;
-                        }
+                        i18n.changeLanguage(userSettings.language);
                     }
-                }
-
-                const browserLocale = navigator.language.split('-')[0] as Locale;
-                const supportedLocales = getSupportedLocales();
-                if (supportedLocales.includes(browserLocale)) {
-                    setLocale(browserLocale);
                 }
             } catch (err) {
                 console.error('Error loading locale:', err);
@@ -68,7 +54,7 @@ export default function SubscriptionPage() {
         }
 
         initializeLocale();
-    }, []);
+    }, [i18n]);
 
     useEffect(() => {
         async function loadPlans() {
@@ -78,14 +64,14 @@ export default function SubscriptionPage() {
                 setPlans(subscriptionPlans);
             } catch (err) {
                 console.error('Error loading plans:', err);
-                setError(t.errors.loadingPlans);
+                setError(t('errors.loadingPlans'));
             } finally {
                 setIsLoading(false);
             }
         }
 
         loadPlans();
-    }, [t.errors.loadingPlans]);
+    }, [t]);
 
     async function handleStartSubscription(planId: string) {
         try {
@@ -99,7 +85,7 @@ export default function SubscriptionPage() {
             });
 
             if (!res.ok) {
-                throw new Error(t.errors.checkoutSession);
+                throw new Error(t('errors.checkoutSession'));
             }
 
             const data = await res.json();
@@ -108,7 +94,7 @@ export default function SubscriptionPage() {
             }
         } catch (error) {
             console.error("Error:", error);
-            alert(t.errors.generalError);
+            alert(t('errors.generalError'));
         } finally {
             setLoading(null);
         }
@@ -119,7 +105,7 @@ export default function SubscriptionPage() {
             <div className="container mx-auto py-10 text-center">
                 <p className="text-red-500">{error}</p>
                 <Button onClick={() => window.location.reload()} className="mt-4">
-                    {t.errors.retry}
+                    {t('errors.retry')}
                 </Button>
             </div>
         );
@@ -158,21 +144,21 @@ export default function SubscriptionPage() {
 
     return (
         <div className="container mx-auto py-10">
-            <h1 className="text-3xl font-bold text-center mb-10">{t.plans.title}</h1>
+            <h1 className="text-3xl font-bold text-center mb-10">{t('plans.title')}</h1>
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 {plans.map((plan) => (
                     <Card key={plan.id} className="flex flex-col">
                         <CardHeader>
-                            <CardTitle>{plan.name}</CardTitle>
-                            <CardDescription>{plan.description}</CardDescription>
+                            <CardTitle className="text-2xl">{t(`plans.${plan.name.toLowerCase()}.name`)}</CardTitle >
+                            <CardDescription>{t(`plans.${plan.name.toLowerCase()}.description`)}</CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow">
                             <div className="text-3xl font-bold mb-4">
-                                {formatPrice(plan.price, plan.currency, locale)}
-                                <span className="text-sm font-normal">{t.plans.perMonth}</span>
+                                {formatPrice(plan.amount, plan.currency, i18n.language)}
+                                <span className="text-sm font-normal">{t('plans.perMonth')}</span>
                             </div>
                             <ul className="space-y-2">
-                                {plan.features.map((feature, index) => (
+                                {plan.features?.[i18n.language as keyof typeof plan.features]?.map((feature: string, index: number) => (
                                     <li key={index} className="flex items-center">
                                         <svg
                                             className="w-4 h-4 mr-2 text-green-500"
@@ -196,7 +182,7 @@ export default function SubscriptionPage() {
                                 onClick={() => handleStartSubscription(plan.id)}
                                 disabled={!!loading}
                             >
-                                {loading === plan.id ? t.plans.processing : t.plans.selectPlan}
+                                {loading === plan.id ? t('plans.processing') : t('plans.selectPlan')}
                             </Button>
                         </CardFooter>
                     </Card>
