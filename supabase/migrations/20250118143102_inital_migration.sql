@@ -161,3 +161,49 @@ CREATE INDEX IF NOT EXISTS idx_webhook_events_event_id ON stripe_webhook_events(
 CREATE INDEX IF NOT EXISTS idx_invoices_stripe_invoice_id ON invoices(stripe_invoice_id);
 CREATE INDEX IF NOT EXISTS idx_invoices_user_id ON invoices(user_id);
 CREATE INDEX IF NOT EXISTS idx_invoice_items_invoice_id ON invoice_items(invoice_id);
+
+-- 監査用トリガーの設定 (created_by, updated_by)
+-- 監査用のトリガー関数を作成
+CREATE OR REPLACE FUNCTION public.set_audit_columns()
+RETURNS trigger AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    NEW.created_by := COALESCE(NEW.created_by, auth.uid());
+    NEW.updated_by := auth.uid();
+  ELSIF TG_OP = 'UPDATE' THEN
+    NEW.updated_by := auth.uid();
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 各テーブルに対してトリガーを作成
+CREATE TRIGGER set_audit_columns_users
+BEFORE INSERT OR UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_subscription_plans
+BEFORE INSERT OR UPDATE ON subscription_plans
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_subscriptions
+BEFORE INSERT OR UPDATE ON subscriptions
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_stripe_webhook_events
+BEFORE INSERT OR UPDATE ON stripe_webhook_events
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_invoices
+BEFORE INSERT OR UPDATE ON invoices
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_invoice_items
+BEFORE INSERT OR UPDATE ON invoice_items
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
