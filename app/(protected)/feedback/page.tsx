@@ -13,16 +13,42 @@ export default function FeedbackPage() {
     const { t } = useTranslation('common')
     const [feedbackType, setFeedbackType] = useState('general')
     const [feedbackText, setFeedbackText] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // Here you would typically send the feedback to your backend
-        console.log({ feedbackType, feedbackText })
-        toast({
-            title: t('feedback.form.success.title'),
-            description: t('feedback.form.success.description'),
-        })
-        setFeedbackText('')
+        setIsSubmitting(true)
+
+        try {
+            const res = await fetch('/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ feedbackType, feedbackText }),
+            })
+
+            if (!res.ok) {
+                throw new Error('Failed to send feedback')
+            }
+
+            // フィードバック送信成功
+            toast({
+                title: t('feedback.form.success.title'),
+                description: t('feedback.form.success.description'),
+            })
+
+            // フォームリセット
+            setFeedbackText('')
+            setFeedbackType('general')
+        } catch (err) {
+            console.error(err)
+            toast({
+                title: t('toast.error'),
+                description: 'Failed to submit feedback',
+                variant: 'destructive'
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     return (
@@ -37,7 +63,11 @@ export default function FeedbackPage() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label>{t('feedback.form.type.label')}</Label>
-                            <RadioGroup defaultValue="general" onValueChange={setFeedbackType}>
+                            <RadioGroup
+                                defaultValue="general"
+                                onValueChange={setFeedbackType}
+                                value={feedbackType}
+                            >
                                 <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="general" id="general" />
                                     <Label htmlFor="general">{t('feedback.form.type.general')}</Label>
@@ -56,13 +86,15 @@ export default function FeedbackPage() {
                             <Label htmlFor="feedback">{t('feedback.form.content.label')}</Label>
                             <Textarea
                                 id="feedback"
-                                placeholder={t('feedback.form.content.placeholder')}
+                                placeholder={t('feedback.form.content.placeholder') || ''}
                                 value={feedbackText}
                                 onChange={(e) => setFeedbackText(e.target.value)}
                                 rows={5}
                             />
                         </div>
-                        <Button type="submit">{t('feedback.form.submit')}</Button>
+                        <Button type="submit" disabled={isSubmitting}>
+                            {t('feedback.form.submit')}
+                        </Button>
                     </form>
                 </CardContent>
             </Card>
