@@ -149,7 +149,7 @@ export default function SubscriptionPage() {
                 {plans.map((plan) => (
                     <Card key={plan.id} className="flex flex-col">
                         <CardHeader>
-                            <CardTitle className="text-2xl">{t(`plans.${plan.name.toLowerCase()}.name`)}</CardTitle >
+                            <CardTitle className="text-3xl">{t(`plans.${plan.name.toLowerCase()}.name`)}</CardTitle >
                             <CardDescription>{t(`plans.${plan.name.toLowerCase()}.description`)}</CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow">
