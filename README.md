@@ -107,7 +107,84 @@ STRIPE_PRICE_ID=your_stripe_price_id
 - Stripe ダッシュボードで「製品」や「価格 (Price)」を作成し、`stripe_price_id` 等を Supabase のテーブルに登録します。
 - Webhook 等が必要な場合は適宜設定してください。
 
-### 6. 開発サーバーの起動
+### 6. Supabase SQL の実行
+
+Supabase の SQL Editor で以下の SQL を実行してください。  
+※ stripe_price_id は「5. Stripe の設定」で取得した値に置き換えてください。
+
+```sql
+INSERT INTO subscription_plans (
+    name,
+    stripe_price_id,
+    interval,
+    interval_count,
+    amount,
+    currency,
+    trial_period_days,
+    features,
+    metadata,
+    created_by,
+    updated_by,
+    created_at,
+    updated_at
+) VALUES 
+(
+    'Basic',
+    'price_1QiqklGH53xq0qpxw4K8gS3E',
+    'month',
+    1,
+    20,
+    'USD',
+    14,
+    '{
+        "ja": [
+            "基本機能の利用",
+            "1ユーザーまで",
+            "基本サポート"
+        ],
+        "en": [
+            "Basic features",
+            "Up to 1 user",
+            "Basic support"
+        ]
+    }'::jsonb,
+    '{"tier": "basic"}'::jsonb,
+    NULL,
+    NULL,
+    TIMEZONE('utc'::text, NOW()),
+    TIMEZONE('utc'::text, NOW())
+),
+(
+    'Pro',
+    'price_1Qiql5GH53xq0qpxpoL3OSHi',
+    'month',
+    1,
+    100,
+    'USD',
+    14,
+    '{
+        "ja": [
+            "すべての機能を利用可能",
+            "無制限のユーザー",
+            "優先サポート",
+            "高度な分析機能"
+        ],
+        "en": [
+            "All features available",
+            "Unlimited users",
+            "Priority support",
+            "Advanced analytics"
+        ]
+    }'::jsonb,
+    '{"tier": "pro"}'::jsonb,
+    NULL,
+    NULL,
+    TIMEZONE('utc'::text, NOW()),
+    TIMEZONE('utc'::text, NOW())
+);
+```
+
+### 7. 開発サーバーの起動
 
 ```bash
 npm run dev
