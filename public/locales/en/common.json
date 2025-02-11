@@ -325,8 +325,38 @@
         "success": "Success",
         "error": "Error"
     },
+    "stripe": {
+        "disabled": {
+            "title": "Stripe Payment is Disabled",
+            "message": "Stripe payment configuration is not complete"
+        }
+    },
+    "plans": {
+        "title": "Subscription Plans",
+        "perMonth": "/month",
+        "processing": "Processing...",
+        "selectPlan": "Select this plan",
+        "basic": {
+            "name": "Basic",
+            "description": "Great for small businesses"
+        },
+        "pro": {
+            "name": "Pro",
+            "description": "For professionals who need more features"
+        },
+        "enterprise": {
+            "name": "Enterprise",
+            "description": "Custom solutions for large organizations"
+        }
+    },
     "common": {
         "saving": "Saving...",
         "save_changes": "Save Changes"
+    },
+    "errors": {
+        "loadingPlans": "Failed to load subscription plans",
+        "checkoutSession": "Failed to create checkout session",
+        "generalError": "An error occurred",
+        "retry": "Retry"
     }
 }

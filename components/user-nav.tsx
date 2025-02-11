@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { i18n } from '@/i18n.config'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { isStripeEnabled } from '@/utils/stripe'
 
 export function UserNav() {
     const router = useRouter()
@@ -87,14 +88,18 @@ export function UserNav() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator/>
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="py-3" onClick={() => router.push('/subscription')}>
-                        <CreditCard className="mr-2 h-4 w-4" />
-                        <span>{t('header.subscription')}</span>
-                    </DropdownMenuItem >
-                    <DropdownMenuItem className="py-3" onClick={() => router.push('/billing')}>
-                        <Receipt className="mr-2 h-4 w-4" />
-                        <span>{t('header.billing')}</span>
-                    </DropdownMenuItem >
+                    {isStripeEnabled() && (
+                        <>
+                            <DropdownMenuItem className="py-3" onClick={() => router.push('/subscription')}>
+                                <CreditCard className="mr-2 h-4 w-4" />
+                                <span>{t('header.subscription')}</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="py-3" onClick={() => router.push('/billing')}>
+                                <Receipt className="mr-2 h-4 w-4" />
+                                <span>{t('header.billing')}</span>
+                            </DropdownMenuItem>
+                        </>
+                    )}
                     <DropdownMenuItem className="py-3" onClick={() => router.push('/usage')}>
                         <BarChart3 className="mr-2 h-4 w-4" />
                         <span>{t('header.usage')}</span>
@@ -123,11 +128,12 @@ export function UserNav() {
                                 <DropdownMenuItem
                                     key={locale}
                                     onClick={() => handleLanguageChange(locale)}
+                                    className="justify-between"
                                 >
-                                    <div className="w-4 h-4 mr-2 inline-flex items-center justify-center">
-                                        {i18nInstance.language === locale && <Check className="h-4 w-4" />}
-                                    </div>
                                     <span>{t(`header.languages.${locale}`)}</span>
+                                    {i18nInstance.language === locale && (
+                                        <Check className="h-4 w-4 ml-2" />
+                                    )}
                                 </DropdownMenuItem>
                             ))}
                         </DropdownMenuSubContent>

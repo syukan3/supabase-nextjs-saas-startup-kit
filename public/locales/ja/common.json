@@ -333,6 +333,36 @@
         "success": "成功",
         "error": "エラー"
     },
+    "stripe": {
+        "disabled": {
+            "title": "Stripe決済が無効です",
+            "message": "Stripe決済の設定が完了していません"
+        }
+    },
+    "plans": {
+        "title": "料金プラン",
+        "perMonth": "/月",
+        "processing": "処理中...",
+        "selectPlan": "このプランを選択",
+        "basic": {
+            "name": "Basic",
+            "description": "小規模ビジネスに最適"
+        },
+        "pro": {
+            "name": "Pro",
+            "description": "成長中の企業に理想的"
+        },
+        "enterprise": {
+            "name": "Enterprise",
+            "description": "大規模組織向けのカスタムソリューション"
+        }
+    },
+    "errors": {
+        "loadingPlans": "料金プランの読み込みに失敗しました",
+        "checkoutSession": "チェックアウトセッションの作成に失敗しました",
+        "generalError": "エラーが発生しました",
+        "retry": "再試行"
+    },
     "common": {
         "saving": "保存中...",
         "save_changes": "変更を保存"

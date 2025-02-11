@@ -1,0 +1,38 @@
+{
+  "plans": {
+    "title": "Pricing Plans",
+    "perMonth": "/month",
+    "selectPlan": "Select this plan",
+    "processing": "Processing...",
+    "basic": {
+      "name": "Basic",
+      "price": "$10",
+      "description": "Basic plan for individuals and small teams",
+      "features": [
+        "Basic features",
+        "Up to 1 user",
+        "Basic support"
+      ]
+    },
+    "pro": {
+      "name": "Professional",
+      "price": "$30",
+      "description": "Advanced plan for businesses",
+      "features": [
+        "All features included",
+        "Unlimited users",
+        "Priority support",
+        "Advanced analytics"
+      ]
+    }
+  },
+  "errors": {
+    "loadingPlans": "Failed to load plans.",
+    "checkoutSession": "Failed to create checkout session.",
+    "retry": "Retry",
+    "generalError": "An error occurred. Please try again."
+  },
+  "loading": {
+    "plans": "Loading plans..."
+  }
+} 
