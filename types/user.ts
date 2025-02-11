@@ -4,8 +4,10 @@ export interface User {
     id: string;
     email: string;
     stripe_customer_id?: string;
+    created_by: string;
+    updated_by: string;
     created_at: string;
-    updated_at?: string;
+    updated_at: string;
     last_login?: string;
 }
 
@@ -13,8 +15,10 @@ export const UserSchema = z.object({
     id: z.string(),
     email: z.string().email(),
     stripe_customer_id: z.string().optional(),
+    created_by: z.string(),
+    updated_by: z.string(),
     created_at: z.string(),
-    updated_at: z.string().optional(),
+    updated_at: z.string(),
     last_login: z.string().optional(),
 });
 

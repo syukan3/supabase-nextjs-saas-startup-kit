@@ -42,14 +42,20 @@ export const SubscriptionUpdatePayloadSchema = z.object({
 export type SubscriptionPlan = {
     id: string;
     name: string;
-    description: string;
-    price: number;
-    currency: string;
-    interval: 'month' | 'year';
+    description?: string;
     stripe_price_id: string;
-    features: string[];
+    interval: 'day' | 'week' | 'month' | 'year';
+    interval_count: number;
+    trial_period_days?: number;
+    amount: number;
+    currency: string;
+    features?: string[];
+    metadata?: Record<string, any>;
+    created_by: string;
+    updated_by: string;
     created_at: string;
     updated_at: string;
+    is_active?: boolean;
 };
 
 export const SubscriptionPlanSchema = z.object({
@@ -64,7 +70,10 @@ export const SubscriptionPlanSchema = z.object({
     currency: z.string(),
     features: z.array(z.string()).optional(),
     metadata: z.record(z.any()).optional(),
+    created_by: z.string(),
+    updated_by: z.string(),
     created_at: z.string(),
+    updated_at: z.string(),
     is_active: z.boolean().optional(),
 });
 
@@ -93,7 +102,10 @@ export interface Subscription {
     trial_start?: string;
     trial_end?: string;
     metadata?: Record<string, any>;
+    created_by: string;
+    updated_by: string;
     created_at: string;
+    updated_at: string;
 }
 
 export const SubscriptionSchema = z.object({
@@ -109,7 +121,10 @@ export const SubscriptionSchema = z.object({
     trial_start: z.string().optional(),
     trial_end: z.string().optional(),
     metadata: z.record(z.any()).optional(),
+    created_by: z.string(),
+    updated_by: z.string(),
     created_at: z.string(),
+    updated_at: z.string(),
 });
 
 export interface Invoice {
@@ -125,10 +140,11 @@ export interface Invoice {
     pdf_url?: string;
     hosted_invoice_url?: string;
     metadata?: Record<string, any>;
+    created_by: string;
+    updated_by: string;
     created_at: string;
-    updated_at?: string;
+    updated_at: string;
     paid_at?: string;
-    payment_intent_id?: string;
 }
 
 export const InvoiceSchema = z.object({
@@ -144,10 +160,11 @@ export const InvoiceSchema = z.object({
     pdf_url: z.string().optional(),
     hosted_invoice_url: z.string().optional(),
     metadata: z.record(z.any()).optional(),
+    created_by: z.string(),
+    updated_by: z.string(),
     created_at: z.string(),
-    updated_at: z.string().optional(),
+    updated_at: z.string(),
     paid_at: z.string().optional(),
-    payment_intent_id: z.string().optional(),
 });
 
 export interface InvoiceItem {
@@ -161,7 +178,10 @@ export interface InvoiceItem {
     period_end?: string;
     proration: boolean;
     metadata?: Record<string, any>;
+    created_by: string;
+    updated_by: string;
     created_at: string;
+    updated_at: string;
 }
 
 export const InvoiceItemSchema = z.object({
@@ -175,7 +195,10 @@ export const InvoiceItemSchema = z.object({
     period_end: z.string().optional(),
     proration: z.boolean(),
     metadata: z.record(z.any()).optional(),
+    created_by: z.string(),
+    updated_by: z.string(),
     created_at: z.string(),
+    updated_at: z.string(),
 });
 
 export type BillingOperation = {
@@ -263,7 +286,10 @@ export interface StripeWebhookEvent {
     event_id: string;
     event_type: string;
     event_data: Record<string, any>;
+    created_by: string;
+    updated_by: string;
     created_at: string;
+    updated_at: string;
 }
 
 export const StripeWebhookEventSchema = z.object({
@@ -271,5 +297,8 @@ export const StripeWebhookEventSchema = z.object({
     event_id: z.string(),
     event_type: z.string(),
     event_data: z.record(z.any()),
+    created_by: z.string(),
+    updated_by: z.string(),
     created_at: z.string(),
+    updated_at: z.string(),
 });

@@ -3,7 +3,7 @@ import type { SubscriptionPlan } from '@/types/subscription';
 
 export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
   const supabase = createClientComponentClient();
-  
+
   const { data: plans, error } = await supabase
     .from('subscription_plans')
     .select(`
@@ -28,13 +28,19 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
     id: plan.id,
     name: plan.name,
     description: plan.metadata?.description || '',
-    price: plan.metadata?.price || 0,
+    interval_count: plan.interval_count,
+    trial_period_days: plan.trial_period_days,
+    amount: plan.metadata?.price || 0,
     currency: plan.metadata?.currency || 'USD',
     interval: plan.interval,
     stripe_price_id: plan.stripe_price_id,
     features: plan.metadata?.features || [],
+    created_by: '',
+    updated_by: '',
+    severity: 1,
     created_at: plan.created_at,
-    updated_at: plan.created_at
+    updated_at: plan.created_at,
+    is_active: plan.metadata?.is_active || true,
   })) || [];
 
   return transformedPlans;
@@ -45,4 +51,4 @@ export function formatPrice(price: number, currency: string, locale: string): st
     style: 'currency',
     currency: currency,
   }).format(price);
-} 
+}
