@@ -2,9 +2,6 @@
 
 このリポジトリは、Supabase、Next.js (App Router)、Stripe を使用して構築された SaaS アプリケーションのスターターキットです。
 認証、データベース、支払い処理などの基本的な機能を備えており、SaaS アプリケーションの開発を迅速に開始できます。
-# Supabase + Next.js + Stripe SaaS スターターキット
-
-このリポジトリは、「Supabase」「Next.js (App Router)」「Stripe」を使用した **SaaS アプリケーションのスターターキット** です。ユーザー認証、データベース連携、サブスクリプション課金など、SaaS に必要な基本機能をすぐに利用できるようになっており、新規プロジェクトの立ち上げを加速します。
 
 ---
 
@@ -41,7 +38,7 @@
 ### 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/your-account/supabase-nextjs-saas-startup-kit.git
+git clone https://github.com/syukan3/supabase-nextjs-saas-startup-kit.git
 cd supabase-nextjs-saas-startup-kit
 ```
 
@@ -58,11 +55,17 @@ yarn install
 ルートに `.env.local` ファイルを作成し、以下の変数を設定してください。
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
-STRIPE_SECRET_KEY=YOUR_STRIPE_SECRET_KEY
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=YOUR_STRIPE_PUBLISHABLE_KEY
+# サイトのURL
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Stripe
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+STRIPE_PRICE_ID=your_stripe_price_id
 ```
 
 > **Note:** `YOUR_SUPABASE_URL`・`YOUR_SUPABASE_ANON_KEY` は Supabase プロジェクトから取得し、  

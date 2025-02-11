@@ -8,7 +8,10 @@ CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email TEXT NOT NULL UNIQUE,
     stripe_customer_id TEXT UNIQUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+    created_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    updated_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
 );
 
 --------------------------------------------------------
@@ -20,9 +23,15 @@ CREATE TABLE IF NOT EXISTS subscription_plans (
     stripe_price_id TEXT NOT NULL UNIQUE,
     interval TEXT NOT NULL CHECK (interval IN ('day', 'week', 'month', 'year')),
     interval_count INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
+    currency TEXT NOT NULL,
     trial_period_days INTEGER,
+    features JSONB,
     metadata JSONB,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+    created_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    updated_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
 );
 
 --------------------------------------------------------
@@ -50,7 +59,10 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     cancel_at_period_end BOOLEAN DEFAULT FALSE,
     canceled_at TIMESTAMP WITH TIME ZONE,
     metadata JSONB,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+    created_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    updated_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
 );
 
 --------------------------------------------------------
@@ -62,7 +74,10 @@ CREATE TABLE IF NOT EXISTS stripe_webhook_events (
     event_id TEXT NOT NULL UNIQUE,              -- Stripe上の event.id (例: evt_xxx)
     event_type TEXT NOT NULL,                  -- イベントタイプ (ex: invoice.created, charge.succeeded, etc.)
     event_data JSONB,                          -- Stripe から受け取った payload 全体
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+    created_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    updated_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
 );
 
 --------------------------------------------------------
@@ -90,8 +105,10 @@ CREATE TABLE IF NOT EXISTS invoices (
     pdf_url TEXT,                               -- Invoice PDF を参照するURL
     hosted_invoice_url TEXT,                    -- Stripe上のインボイス閲覧URL
     metadata JSONB,
+    created_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    updated_by UUID REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
-    updated_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
     paid_at TIMESTAMP WITH TIME ZONE           -- 支払完了日時 (オプション)
 );
 
@@ -110,7 +127,10 @@ CREATE TABLE IF NOT EXISTS invoice_items (
     period_end TIMESTAMP WITH TIME ZONE,        -- 対象期間の終了
     proration BOOLEAN DEFAULT FALSE,            -- 調整(プロレーション)がかかった明細かどうか
     metadata JSONB,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+    created_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    updated_by UUID REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
 );
 
 --------------------------------------------------------
@@ -141,3 +161,49 @@ CREATE INDEX IF NOT EXISTS idx_webhook_events_event_id ON stripe_webhook_events(
 CREATE INDEX IF NOT EXISTS idx_invoices_stripe_invoice_id ON invoices(stripe_invoice_id);
 CREATE INDEX IF NOT EXISTS idx_invoices_user_id ON invoices(user_id);
 CREATE INDEX IF NOT EXISTS idx_invoice_items_invoice_id ON invoice_items(invoice_id);
+
+-- 監査用トリガーの設定 (created_by, updated_by)
+-- 監査用のトリガー関数を作成
+CREATE OR REPLACE FUNCTION public.set_audit_columns()
+RETURNS trigger AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    NEW.created_by := COALESCE(NEW.created_by, auth.uid());
+    NEW.updated_by := auth.uid();
+  ELSIF TG_OP = 'UPDATE' THEN
+    NEW.updated_by := auth.uid();
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 各テーブルに対してトリガーを作成
+CREATE TRIGGER set_audit_columns_users
+BEFORE INSERT OR UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_subscription_plans
+BEFORE INSERT OR UPDATE ON subscription_plans
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_subscriptions
+BEFORE INSERT OR UPDATE ON subscriptions
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_stripe_webhook_events
+BEFORE INSERT OR UPDATE ON stripe_webhook_events
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_invoices
+BEFORE INSERT OR UPDATE ON invoices
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();
+
+CREATE TRIGGER set_audit_columns_invoice_items
+BEFORE INSERT OR UPDATE ON invoice_items
+FOR EACH ROW
+EXECUTE FUNCTION public.set_audit_columns();

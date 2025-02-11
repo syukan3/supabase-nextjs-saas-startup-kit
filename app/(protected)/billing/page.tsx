@@ -4,9 +4,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { CreditCard, Download } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { isStripeEnabled } from '@/utils/stripe'
 
 export default function BillingPage() {
     const { t } = useTranslation()
+
+    if (!isStripeEnabled()) {
+        return (
+            <div className="container mx-auto px-4 py-8">
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold mb-4">{t('stripe.disabled.title')}</h1>
+                    <p>{t('stripe.disabled.message')}</p>
+                </div>
+            </div>
+        );
+    }
+
     const invoices = [
         { id: 'INV-001', date: '2023-05-01', amount: '¥5,000' },
         { id: 'INV-002', date: '2023-06-01', amount: '¥5,000' },
