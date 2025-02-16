@@ -40,11 +40,11 @@ export function Navbar({ isOpen, isMinimized, onToggle, isInitialRender }: { isO
     }, [pathname])
 
     useEffect(() => {
-        logger.debug('現在開いているアイテム', { openItems })
+        logger.debug('Currently open items', { openItems })
     }, [openItems])
 
     const toggleItem = (name: string) => {
-        logger.debug('アイテムの切り替え', { name })
+        logger.debug('Toggling item', { name })
         setOpenItems(prev =>
             prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
         )
@@ -55,7 +55,7 @@ export function Navbar({ isOpen, isMinimized, onToggle, isInitialRender }: { isO
         const showTooltip = isMinimized && depth === 0
         const isItemOpen = openItems.includes(item.name)
 
-        logger.debug('NavItemのレンダリング', {
+        logger.debug('Rendering NavItem', {
             name: item.name,
             isOpen: isItemOpen,
             hasSubItems: !!item.subItems

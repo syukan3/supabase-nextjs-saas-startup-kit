@@ -35,7 +35,6 @@ export default function FeedbackPage() {
         try {
             const result = await submitFeedback(feedbackType, feedbackText)
 
-            // 1) 成功・失敗のレスポンスに応じてわかりやすい表示を行う
             if (!result.success) {
                 if (result.error === 'unauthorized') {
                     // 未ログインなどのリダイレクトパターン
@@ -45,11 +44,19 @@ export default function FeedbackPage() {
                         variant: 'destructive',
                     })
                     router.push('/login')
-                } else {
-                    logger.error('フィードバック送信エラー', new Error(result.details))
+                } else if (result.error === 'validation_error') {
+                    // バリデーションエラーの場合、各エラーメッセージを翻訳
+                    const errorMessages = result.details?.split('||').map(err => t(err)).join(', ')
                     toast({
                         title: t('toast.error'),
-                        description: result.details || t('feedback.submit_error'),
+                        description: errorMessages,
+                        variant: 'destructive',
+                    })
+                } else {
+                    logger.error('Feedback submission error', new Error(result.details))
+                    toast({
+                        title: t('toast.error'),
+                        description: t('feedback.form.error.submission'),
                         variant: 'destructive',
                     })
                 }
@@ -67,7 +74,7 @@ export default function FeedbackPage() {
                 setFeedbackType('general')
             }
         } catch (err) {
-            logger.error('フィードバック送信中の予期せぬエラー', err instanceof Error ? err : new Error('Unknown error'))
+            logger.error('Unexpected error during feedback submission', err instanceof Error ? err : new Error('Unknown error'))
             toast({
                 title: t('toast.error'),
                 description: t('feedback.submit_error'),

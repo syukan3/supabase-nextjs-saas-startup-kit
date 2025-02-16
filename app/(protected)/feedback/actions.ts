@@ -8,12 +8,12 @@ import { logger } from '@/lib/logger'
 // フィードバックのバリデーションスキーマを定義
 const FeedbackInputSchema = z.object({
     feedbackType: z.enum(['general', 'bug', 'feature'], {
-        required_error: 'フィードバックの種類を選択してください',
-        invalid_type_error: '無効なフィードバックの種類です',
+        required_error: 'feedback.form.error.invalid_type',
+        invalid_type_error: 'feedback.form.error.invalid_type',
     }),
     feedbackText: z.string()
-        .min(1, 'フィードバック内容は空にできません')
-        .max(1000, 'フィードバック内容は1000文字以内で入力してください'),
+        .min(1, 'feedback.form.error.empty_content')
+        .max(1000, 'feedback.form.error.too_long'),
 });
 
 export type FeedbackResponse = {
@@ -32,10 +32,11 @@ export async function submitFeedback(
             FeedbackInputSchema.parse({ feedbackType, feedbackText });
         } catch (validationError) {
             if (validationError instanceof z.ZodError) {
+                // エラーメッセージをi18nキーとして返す
                 return {
                     success: false,
                     error: 'validation_error',
-                    details: validationError.errors.map(err => err.message).join(', ')
+                    details: validationError.errors.map(err => err.message).join('||')
                 };
             }
         }
@@ -53,7 +54,7 @@ export async function submitFeedback(
             return {
                 success: false,
                 error: 'unauthorized',
-                details: userError.message
+                details: 'feedback.form.error.unauthorized'
             }
         }
 
@@ -62,7 +63,7 @@ export async function submitFeedback(
             return {
                 success: false,
                 error: 'unauthorized',
-                details: 'No active user found'
+                details: 'feedback.form.error.unauthorized'
             }
         }
 
