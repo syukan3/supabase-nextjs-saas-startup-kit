@@ -8,14 +8,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { useTranslation } from 'react-i18next'
 import { toast } from "@/hooks/use-toast"
-import { submitFeedback } from './actions'
+import { submitFeedback, FeedbackType } from './actions'
 import { useRouter } from 'next/navigation'
 import { logger } from '@/lib/logger'
 
 export default function FeedbackPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
-    const [feedbackType, setFeedbackType] = useState('general')
+    const [feedbackType, setFeedbackType] = useState<FeedbackType>('general')
     const [feedbackText, setFeedbackText] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -46,14 +46,16 @@ export default function FeedbackPage() {
                     router.push('/login')
                 } else if (result.error === 'validation_error') {
                     // バリデーションエラーの場合、各エラーメッセージを翻訳
-                    const errorMessages = result.details?.split('||').map(err => t(err)).join(', ')
+                    const errorMessages = Array.isArray(result.details)
+                        ? result.details.map(err => t(err)).join(', ')
+                        : t(result.details || 'feedback.form.error.validation');
                     toast({
                         title: t('toast.error'),
                         description: errorMessages,
                         variant: 'destructive',
                     })
                 } else {
-                    logger.error('Feedback submission error', new Error(result.details))
+                    logger.error('Feedback submission error', result.details ? new Error(String(result.details)) : new Error('Unknown error'))
                     toast({
                         title: t('toast.error'),
                         description: t('feedback.form.error.submission'),
@@ -99,7 +101,7 @@ export default function FeedbackPage() {
                             <Label>{t('feedback.form.type.label')}</Label>
                             <RadioGroup
                                 defaultValue="general"
-                                onValueChange={setFeedbackType}
+                                onValueChange={(value: string) => setFeedbackType(value as FeedbackType)}
                                 value={feedbackType}
                             >
                                 <div className="flex items-center space-x-2">

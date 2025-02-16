@@ -25,7 +25,6 @@ export default function SecurityPage() {
             newPasswordLength: newPassword.length,
             confirmPasswordLength: confirmPassword.length
         })
-        logger.debug('Password change attempt', { currentPassword, newPassword, confirmPassword })
         toast({
             title: t('toast.password_changed.title'),
             description: t('toast.password_changed.description'),

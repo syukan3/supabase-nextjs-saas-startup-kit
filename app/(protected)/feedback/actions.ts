@@ -16,29 +16,27 @@ const FeedbackInputSchema = z.object({
         .max(1000, 'feedback.form.error.too_long'),
 });
 
+export type FeedbackType = 'general' | 'bug' | 'feature'
+
 export type FeedbackResponse = {
     success: boolean
     error?: string
-    details?: string
+    details?: string | string[]
 }
 
 export async function submitFeedback(
-    feedbackType: string,
+    feedbackType: FeedbackType,
     feedbackText: string
 ): Promise<FeedbackResponse> {
     try {
         // 入力値のバリデーション
-        try {
-            FeedbackInputSchema.parse({ feedbackType, feedbackText });
-        } catch (validationError) {
-            if (validationError instanceof z.ZodError) {
-                // エラーメッセージをi18nキーとして返す
-                return {
-                    success: false,
-                    error: 'validation_error',
-                    details: validationError.errors.map(err => err.message).join('||')
-                };
-            }
+        const validationResult = FeedbackInputSchema.safeParse({ feedbackType, feedbackText });
+        if (!validationResult.success) {
+            return {
+                success: false,
+                error: 'validation_error',
+                details: validationResult.error.errors.map(err => err.message)
+            };
         }
 
         const supabase = await createClient()
@@ -65,19 +63,6 @@ export async function submitFeedback(
                 error: 'unauthorized',
                 details: 'feedback.form.error.unauthorized'
             }
-        }
-
-        // ユーザー情報を users テーブルに upsert
-        const { error: upsertError } = await supabase
-            .from('users')
-            .upsert({ id: user.id, email: user.email });
-        if (upsertError) {
-            logger.error('Error upserting user information', upsertError);
-            return {
-                success: false,
-                error: 'database_error',
-                details: upsertError.message
-            };
         }
 
         // フィードバック送信前のログ
