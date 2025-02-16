@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
+import { logger } from '@/lib/logger'
 
 // フィードバックのバリデーションスキーマを定義
 const FeedbackInputSchema = z.object({
@@ -49,7 +49,7 @@ export async function submitFeedback(
         } = await supabase.auth.getUser()
 
         if (userError) {
-            console.error('[User Error]', userError)
+            logger.error('User authentication error', userError)
             return {
                 success: false,
                 error: 'unauthorized',
@@ -58,7 +58,7 @@ export async function submitFeedback(
         }
 
         if (!user) {
-            console.error('[No User]')
+            logger.error('No active user found')
             return {
                 success: false,
                 error: 'unauthorized',
@@ -66,12 +66,12 @@ export async function submitFeedback(
             }
         }
 
-        // ユーザー情報を users テーブルに upsert して、外部キー制約エラーを回避する
+        // ユーザー情報を users テーブルに upsert
         const { error: upsertError } = await supabase
             .from('users')
             .upsert({ id: user.id, email: user.email });
         if (upsertError) {
-            console.error('[User Upsert Error]', upsertError);
+            logger.error('Error upserting user information', upsertError);
             return {
                 success: false,
                 error: 'database_error',
@@ -79,8 +79,8 @@ export async function submitFeedback(
             };
         }
 
-        // 挿入前にユーザー情報をログ出力
-        console.log('[User Info]', {
+        // フィードバック送信前のログ
+        logger.info('Feedback submission preparation complete', {
             userId: user.id,
             feedbackType,
             contentLength: feedbackText.length
@@ -96,9 +96,8 @@ export async function submitFeedback(
             })
 
         if (insertError) {
-            console.error('[Feedback Insert Error]', {
+            logger.error('Feedback registration error', insertError, {
                 code: insertError.code,
-                message: insertError.message,
                 details: insertError.details,
                 hint: insertError.hint
             })
@@ -111,9 +110,10 @@ export async function submitFeedback(
 
         // /feedback ページの再検証をトリガー
         revalidatePath('/feedback')
+        logger.info('Feedback submitted successfully', { userId: user.id, feedbackType })
         return { success: true }
     } catch (error) {
-        console.error('[Feedback Action Error]', error)
+        logger.error('Unexpected error during feedback processing', error instanceof Error ? error : new Error('Unknown error'))
         return {
             success: false,
             error: 'internal_error',

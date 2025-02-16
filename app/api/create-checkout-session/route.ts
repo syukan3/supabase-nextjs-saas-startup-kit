@@ -1,8 +1,7 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@/utils/supabase/server';
+import { logger } from '@/lib/logger'
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error("STRIPE_SECRET_KEY is not set");
@@ -112,7 +111,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
-    console.error("Error:", error);
+    logger.error('Error creating checkout session', error instanceof Error ? error : new Error('Unknown error'))
     return NextResponse.json(
       { error: "チェックアウトセッションの作成に失敗しました" },
       { status: 500 }

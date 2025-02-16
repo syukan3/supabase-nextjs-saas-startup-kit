@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from "@/hooks/use-toast"
 import { submitFeedback } from './actions'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 
 export default function FeedbackPage() {
     const { t } = useTranslation('common')
@@ -45,11 +46,10 @@ export default function FeedbackPage() {
                     })
                     router.push('/login')
                 } else {
-                    // それ以外のエラー
-                    console.error('[Feedback Submit Error]', result.details)
+                    logger.error('フィードバック送信エラー', new Error(result.details))
                     toast({
                         title: t('toast.error'),
-                        description: t('common.errors.submission'),
+                        description: result.details || t('feedback.submit_error'),
                         variant: 'destructive',
                     })
                 }
@@ -67,11 +67,11 @@ export default function FeedbackPage() {
                 setFeedbackType('general')
             }
         } catch (err) {
-            console.error('[Feedback Submit Error]', err)
+            logger.error('フィードバック送信中の予期せぬエラー', err instanceof Error ? err : new Error('Unknown error'))
             toast({
                 title: t('toast.error'),
-                description: t('common.errors.unexpected'),
-                variant: 'destructive'
+                description: t('feedback.submit_error'),
+                variant: 'destructive',
             })
         } finally {
             setIsSubmitting(false)

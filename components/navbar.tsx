@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { LayoutDashboard, User, Settings, ChevronRight, ChevronDown, FileText, BarChart, Users, Home, Briefcase, HelpCircle, Bell } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { logger } from '@/lib/logger'
 
 const navigation = [
     {
@@ -39,11 +40,11 @@ export function Navbar({ isOpen, isMinimized, onToggle, isInitialRender }: { isO
     }, [pathname])
 
     useEffect(() => {
-        console.log('Current open items:', openItems)
+        logger.debug('現在開いているアイテム', { openItems })
     }, [openItems])
 
     const toggleItem = (name: string) => {
-        console.log('Toggling item:', name)
+        logger.debug('アイテムの切り替え', { name })
         setOpenItems(prev =>
             prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
         )
@@ -54,7 +55,11 @@ export function Navbar({ isOpen, isMinimized, onToggle, isInitialRender }: { isO
         const showTooltip = isMinimized && depth === 0
         const isItemOpen = openItems.includes(item.name)
 
-        console.log(`Rendering NavItem: ${item.name}, isOpen: ${isItemOpen}, hasSubItems: ${!!item.subItems}`)
+        logger.debug('NavItemのレンダリング', {
+            name: item.name,
+            isOpen: isItemOpen,
+            hasSubItems: !!item.subItems
+        })
 
         return (
             <TooltipProvider>

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "@/hooks/use-toast"
 import { useTranslation } from 'react-i18next'
+import { logger } from '@/lib/logger'
 
 export default function NotificationsPage() {
     const { t } = useTranslation()
@@ -18,7 +19,12 @@ export default function NotificationsPage() {
 
     const handleSave = () => {
         // Here you would typically save the notification settings to your backend
-        console.log({ emailNotifications, pushNotifications, smsNotifications, notificationFrequency })
+        logger.debug('Notification settings changed', {
+            emailNotifications,
+            pushNotifications,
+            smsNotifications,
+            notificationFrequency
+        })
         toast({
             title: t('toast.notification_saved.title'),
             description: t('toast.notification_saved.description'),

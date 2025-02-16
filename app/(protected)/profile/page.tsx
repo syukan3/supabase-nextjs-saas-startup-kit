@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { useTranslation } from 'react-i18next'
 import type { UserProfile } from '@/types/user'
+import { logger } from '@/lib/logger'
 
 export default function ProfilePage() {
     const { t } = useTranslation()
@@ -35,7 +36,7 @@ export default function ProfilePage() {
         try {
             const supabase = createClient()
             const { data: { user } } = await supabase.auth.getUser()
-            
+
             if (user) {
                 const { data: profileData, error: profileError } = await supabase
                     .from('user_profiles')
@@ -78,7 +79,7 @@ export default function ProfilePage() {
                 })
             }
         } catch (error) {
-            console.error('Error fetching profile:', error)
+            logger.error('Error fetching profile:', error)
             toast({
                 title: t('toast.error'),
                 description: t('profile.fetch_error'),
@@ -111,7 +112,7 @@ export default function ProfilePage() {
                 description: t('profile.update_success'),
             })
         } catch (error) {
-            console.error('Error updating profile:', error)
+            logger.error('Error updating profile:', error)
             toast({
                 title: t('toast.error'),
                 description: t('profile.update_error'),
@@ -158,7 +159,7 @@ export default function ProfilePage() {
                 description: t('profile.avatar_update_success'),
             })
         } catch (error) {
-            console.error('Error uploading avatar:', error)
+            logger.error('Error uploading avatar:', error)
             toast({
                 title: t('toast.error'),
                 description: t('profile.avatar_update_error'),

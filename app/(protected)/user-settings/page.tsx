@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "@/hooks/use-toast"
 import { useTranslation } from 'react-i18next'
+import { logger } from '@/lib/logger'
 
 export default function SettingsPage() {
     const { t } = useTranslation()
@@ -18,7 +19,7 @@ export default function SettingsPage() {
 
     const handleSave = () => {
         // Here you would typically save the settings to your backend
-        console.log({ emailNotifications, marketingEmails, language, timezone })
+        logger.debug('User settings changed', { emailNotifications, marketingEmails, language, timezone })
         toast({
             title: t('toast.user_settings_saved.title'),
             description: t('toast.user_settings_saved.description'),

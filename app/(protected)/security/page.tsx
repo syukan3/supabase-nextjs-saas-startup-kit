@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "@/hooks/use-toast"
 import { useTranslation } from 'react-i18next'
+import { logger } from '@/lib/logger'
 
 export default function SecurityPage() {
     const { t } = useTranslation()
@@ -19,7 +20,12 @@ export default function SecurityPage() {
     const handlePasswordChange = (e: React.FormEvent) => {
         e.preventDefault()
         // Here you would typically update the password in your backend
-        console.log({ currentPassword, newPassword, confirmPassword })
+        logger.debug('Attempting to change password', {
+            currentPassword: '********', // セキュリティのため実際のパスワードはログに出力しない
+            newPasswordLength: newPassword.length,
+            confirmPasswordLength: confirmPassword.length
+        })
+        logger.debug('Password change attempt', { currentPassword, newPassword, confirmPassword })
         toast({
             title: t('toast.password_changed.title'),
             description: t('toast.password_changed.description'),
