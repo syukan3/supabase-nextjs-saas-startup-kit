@@ -1,12 +1,10 @@
 import { createBrowserClient } from '@supabase/ssr';
 import type { SubscriptionPlan } from '@/types/subscription';
+import { createClient } from '@/utils/supabase/client';
 
 export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
-  // createBrowserClient を使ってクライアントサイドの Supabase クライアントを生成
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  // createClient を使ってクライアントサイドの Supabase クライアントを生成
+  const supabase = createClient();
 
   const { data: plans, error } = await supabase
     .from('subscription_plans')

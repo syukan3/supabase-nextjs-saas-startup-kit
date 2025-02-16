@@ -1,6 +1,6 @@
 'use server'
 
-import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 
@@ -15,26 +15,7 @@ export async function submitFeedback(
     feedbackText: string
 ): Promise<FeedbackResponse> {
     try {
-        // Next.js の cookies() を取得
-        const cookieStore = await cookies()
-
-        // createServerClient を用いて Supabase クライアントを作成
-        const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                cookies: {
-                    // クッキーの取得：Next.js の cookies() から全クッキーを返す
-                    getAll: () => cookieStore.getAll(),
-                    // クッキーの設定：必要に応じて setAll でクッキーを更新
-                    setAll: (cookiesToSet) => {
-                        cookiesToSet.forEach(({ name, value, options }) => {
-                            cookieStore.set(name, value, options)
-                        })
-                    }
-                }
-            }
-        )
+        const supabase = await createClient()
 
         // セッションとユーザー情報を取得
         const {

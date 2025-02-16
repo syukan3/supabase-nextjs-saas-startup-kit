@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { PostgrestError } from "@supabase/supabase-js";
+import { createClient } from '@/utils/supabase/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2025-01-27.acacia",
@@ -110,23 +111,9 @@ async function upsertInvoice(
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
   const signature = request.headers.get("stripe-signature") || "";
-  const cookieStore = await cookies();
 
-  // createServerClient を使用して Supabase クライアントを生成
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: (cookiesToSet) => {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options);
-          });
-        },
-      },
-    }
-  );
+  // createClient を使用して Supabase クライアントを生成
+  const supabase = await createClient();
 
   let event: Stripe.Event;
 
