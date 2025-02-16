@@ -75,7 +75,6 @@ export type UserProfileUpdateInput = Partial<Omit<UserProfile, keyof User>>;
 export type UserSettingsUpdateInput = Partial<Omit<UserSettings, 'user_id'>>;
 
 export type UserStatus = 'active' | 'inactive' | 'suspended';
-
 export interface UserWithProfile extends User {
     profile: UserProfile;
     settings: UserSettings;
@@ -85,3 +84,4 @@ export const UserWithProfileSchema = z.object({
     profile: UserProfileSchema,
     settings: UserSettingsSchema,
 }).merge(UserSchema);
+

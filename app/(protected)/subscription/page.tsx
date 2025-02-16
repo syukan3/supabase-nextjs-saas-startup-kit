@@ -7,9 +7,10 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import type { SubscriptionPlan } from "@/types/subscription";
 import { getSubscriptionPlans, formatPrice } from "@/lib/subscription";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { isStripeEnabled } from '@/utils/stripe';
 import { useTranslation } from 'react-i18next';
+import { logger } from '@/lib/logger'
 
 export default function SubscriptionPage() {
     const { t, i18n } = useTranslation();
@@ -34,7 +35,11 @@ export default function SubscriptionPage() {
     useEffect(() => {
         async function initializeLocale() {
             try {
-                const supabase = createClientComponentClient();
+                // createBrowserClient を利用して Supabase クライアントを生成
+                const supabase = createBrowserClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                );
                 const { data: { session } } = await supabase.auth.getSession();
 
                 if (session?.user) {
@@ -45,11 +50,15 @@ export default function SubscriptionPage() {
                         .single();
 
                     if (userSettings?.language) {
-                        i18n.changeLanguage(userSettings.language);
+                        try {
+                            await i18n.changeLanguage(userSettings.language);
+                        } catch (err) {
+                            logger.error('Error loading locale', err instanceof Error ? err : new Error('Unknown error'))
+                        }
                     }
                 }
             } catch (err) {
-                console.error('Error loading locale:', err);
+                logger.error('Error loading locale', err instanceof Error ? err : new Error('Unknown error'))
             }
         }
 
@@ -61,9 +70,13 @@ export default function SubscriptionPage() {
             try {
                 setIsLoading(true);
                 const subscriptionPlans = await getSubscriptionPlans();
+                if (!subscriptionPlans) {
+                    logger.error('Error fetching plans', new Error('Plans not found'))
+                    return null
+                }
                 setPlans(subscriptionPlans);
             } catch (err) {
-                console.error('Error loading plans:', err);
+                logger.error('Error loading plans', err instanceof Error ? err : new Error('Unknown error'))
                 setError(t('errors.loadingPlans'));
             } finally {
                 setIsLoading(false);
@@ -93,7 +106,7 @@ export default function SubscriptionPage() {
                 window.location.href = data.url;
             }
         } catch (error) {
-            console.error("Error:", error);
+            logger.error('Error creating checkout session', error instanceof Error ? error : new Error('Unknown error'))
             alert(t('errors.generalError'));
         } finally {
             setLoading(null);
@@ -149,7 +162,7 @@ export default function SubscriptionPage() {
                 {plans.map((plan) => (
                     <Card key={plan.id} className="flex flex-col">
                         <CardHeader>
-                            <CardTitle className="text-3xl">{t(`plans.${plan.name.toLowerCase()}.name`)}</CardTitle >
+                            <CardTitle className="text-3xl">{t(`plans.${plan.name.toLowerCase()}.name`)}</CardTitle>
                             <CardDescription>{t(`plans.${plan.name.toLowerCase()}.description`)}</CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow">

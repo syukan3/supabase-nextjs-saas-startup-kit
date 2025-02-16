@@ -144,6 +144,8 @@ ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE invoice_items ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Allow public read-only access" ON users FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated users to insert their own record" ON users FOR INSERT WITH CHECK (auth.uid() = id);
+CREATE POLICY "Allow users to update their own record" ON users FOR UPDATE USING (auth.uid() = id);
 CREATE POLICY "Allow public read-only access" ON subscription_plans FOR SELECT USING (true);
 CREATE POLICY "Allow public read-only access" ON subscriptions FOR SELECT USING (true);
 CREATE POLICY "Allow public read-only access" ON stripe_webhook_events FOR SELECT USING (true);

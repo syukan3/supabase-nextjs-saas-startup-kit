@@ -1,7 +1,7 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-import Stripe from "stripe";
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { createClient } from '@/utils/supabase/server';
+import { logger } from '@/lib/logger'
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error("STRIPE_SECRET_KEY is not set");
@@ -17,7 +17,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 export async function POST(request: Request) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    // createClient を利用して Supabase クライアントを作成
+    const supabase = await createClient();
+
+    // セッションの取得
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -31,7 +34,7 @@ export async function POST(request: Request) {
 
     const { planId } = await request.json();
 
-    // planIdに基づいてDBからstripe_price_idとmetadataを取得
+    // planId に基づいて DB から stripe_price_id と metadata を取得
     const { data: planData, error: planError } = await supabase
       .from("subscription_plans")
       .select("stripe_price_id, metadata")
@@ -53,7 +56,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // ユーザーのstripe_customer_idを取得
+    // ユーザーの stripe_customer_id を取得
     const { data: userData, error: userError } = await supabase
       .from("users")
       .select("stripe_customer_id")
@@ -69,7 +72,7 @@ export async function POST(request: Request) {
 
     let stripeCustomerId = userData?.stripe_customer_id;
 
-    // stripe_customer_idがない場合は新規作成
+    // stripe_customer_id がない場合は新規作成
     if (!stripeCustomerId) {
       const customer = await stripe.customers.create({
         email: session.user.email,
@@ -86,7 +89,7 @@ export async function POST(request: Request) {
         .eq("id", session.user.id);
     }
 
-    // Checkoutセッションを作成
+    // Checkout セッションを作成
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       line_items: [
@@ -108,10 +111,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
-    console.error("Error:", error);
+    logger.error('Error creating checkout session', error instanceof Error ? error : new Error('Unknown error'))
     return NextResponse.json(
       { error: "チェックアウトセッションの作成に失敗しました" },
       { status: 500 }
     );
   }
-} 
+}

@@ -1,8 +1,7 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { PostgrestError } from "@supabase/supabase-js";
+import { createClient } from '@/utils/supabase/server';
+import { logger } from '@/lib/logger';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2025-01-27.acacia",
@@ -110,7 +109,9 @@ async function upsertInvoice(
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
   const signature = request.headers.get("stripe-signature") || "";
-  const supabase = createRouteHandlerClient({ cookies });
+
+  // createClient を使用して Supabase クライアントを生成
+  const supabase = await createClient();
 
   let event: Stripe.Event;
 
@@ -118,7 +119,7 @@ export async function POST(request: Request) {
     const body = await request.text();
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
-    console.error("Webhook Error:", err.message);
+    logger.error('Webhook signature verification error', err instanceof Error ? err : new Error(err.message))
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
   }
 
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
   const { error: webhookError } = await upsertWebhookEvent(supabase, event);
 
   if (webhookError) {
-    console.error("Webhook save error:", webhookError);
+    logger.error('Webhook event save error', webhookError)
     return NextResponse.json(
       { error: "Failed to save webhook event" },
       { status: 500 }
@@ -148,7 +149,7 @@ export async function POST(request: Request) {
         );
 
         if (error) {
-          console.error("Subscription save error:", error);
+          logger.error('Subscription save error', error)
           return NextResponse.json(
             { error: "Failed to save subscription" },
             { status: 500 }
@@ -166,7 +167,7 @@ export async function POST(request: Request) {
         const error = await upsertSubscription(supabase, subscription);
 
         if (error) {
-          console.error("Subscription update error:", error);
+          logger.error('Subscription save error', error)
           return NextResponse.json(
             { error: "Failed to update subscription" },
             { status: 500 }
@@ -193,7 +194,7 @@ export async function POST(request: Request) {
           .single();
 
         if (userRecordError) {
-          console.error("User not found by stripe_customer_id:", stripeCustomerId);
+          logger.error('User not found for stripe_customer_id', new Error(), { stripeCustomerId })
           return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
@@ -221,7 +222,7 @@ export async function POST(request: Request) {
         );
 
         if (error) {
-          console.error("Invoice save/update error:", error);
+          logger.error('Invoice save/update error', error)
           return NextResponse.json(
             { error: "Failed to save/update invoice" },
             { status: 500 }
@@ -257,7 +258,7 @@ export async function POST(request: Request) {
               );
 
             if (itemError) {
-              console.error("Invoice item save error:", itemError);
+              logger.error('Invoice item save error', itemError)
               return NextResponse.json(
                 { error: "Failed to save invoice item" },
                 { status: 500 }
@@ -269,15 +270,15 @@ export async function POST(request: Request) {
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        logger.info('Unhandled event type', { eventType: event.type })
     }
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (err: any) {
-    console.error("Webhook handler error:", err);
+    logger.error('Webhook handler error', err instanceof Error ? err : new Error('Unknown error'))
     return NextResponse.json(
       { error: "Webhook handler error" },
       { status: 500 }
     );
   }
-} 
+}

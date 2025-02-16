@@ -175,9 +175,18 @@
                 "placeholder": "Enter your feedback here..."
             },
             "submit": "Submit",
+            "submitting": "Submitting...",
             "success": {
                 "title": "Feedback Submitted",
                 "description": "Thank you for your feedback."
+            },
+            "error": {
+                "empty_content": "Feedback content cannot be empty",
+                "too_long": "Feedback content must be less than 1000 characters",
+                "invalid_type": "Invalid feedback type",
+                "unauthorized": "Please log in to submit feedback",
+                "submission": "Failed to submit feedback. Please try again.",
+                "unexpected": "An unexpected error occurred. Please try again."
             }
         }
     },
@@ -351,7 +360,14 @@
     },
     "common": {
         "saving": "Saving...",
-        "save_changes": "Save Changes"
+        "save_changes": "Save Changes",
+        "submitting": "Submitting...",
+        "submit": "Submit",
+        "errors": {
+            "unauthorized": "Please log in to continue. Redirecting to login page.",
+            "submission": "Failed to submit. Please try again.",
+            "unexpected": "An unexpected error occurred. Please try again."
+        }
     },
     "errors": {
         "loadingPlans": "Failed to load subscription plans",

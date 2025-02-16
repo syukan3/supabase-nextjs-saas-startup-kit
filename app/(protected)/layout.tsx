@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Header from '@/components/header'
 import { Navbar } from '@/components/navbar'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function ProtectedLayout({
     children,
@@ -57,6 +58,7 @@ export default function ProtectedLayout({
                     style={{ marginLeft: '224px' }}
                 />
             )}
+            <Toaster />
         </div>
     )
 }

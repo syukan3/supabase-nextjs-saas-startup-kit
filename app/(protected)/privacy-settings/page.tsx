@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/hooks/use-toast"
 import { useTranslation } from 'react-i18next'
+import { logger } from '@/lib/logger'
 
 export default function PrivacyPage() {
     const { t } = useTranslation()
@@ -17,7 +18,7 @@ export default function PrivacyPage() {
 
     const handleSave = () => {
         // Here you would typically save the privacy settings to your backend
-        console.log({ profileVisibility, activityTracking, dataSharing })
+        logger.debug('Privacy settings changed', { profileVisibility, activityTracking, dataSharing })
         toast({
             title: t('toast.privacy_settings_saved.title'),
             description: t('toast.privacy_settings_saved.description'),
