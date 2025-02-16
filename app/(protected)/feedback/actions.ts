@@ -1,8 +1,20 @@
 'use server'
 
+import { z } from 'zod';
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
+
+// フィードバックのバリデーションスキーマを定義
+const FeedbackInputSchema = z.object({
+    feedbackType: z.enum(['general', 'bug', 'feature'], {
+        required_error: 'フィードバックの種類を選択してください',
+        invalid_type_error: '無効なフィードバックの種類です',
+    }),
+    feedbackText: z.string()
+        .min(1, 'フィードバック内容は空にできません')
+        .max(1000, 'フィードバック内容は1000文字以内で入力してください'),
+});
 
 export type FeedbackResponse = {
     success: boolean
@@ -15,6 +27,19 @@ export async function submitFeedback(
     feedbackText: string
 ): Promise<FeedbackResponse> {
     try {
+        // 入力値のバリデーション
+        try {
+            FeedbackInputSchema.parse({ feedbackType, feedbackText });
+        } catch (validationError) {
+            if (validationError instanceof z.ZodError) {
+                return {
+                    success: false,
+                    error: 'validation_error',
+                    details: validationError.errors.map(err => err.message).join(', ')
+                };
+            }
+        }
+
         const supabase = await createClient()
 
         // セッションとユーザー情報を取得
