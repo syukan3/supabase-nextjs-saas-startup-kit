@@ -1,4 +1,4 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -110,10 +110,23 @@ async function upsertInvoice(
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
   const signature = request.headers.get("stripe-signature") || "";
-  const cookieStore = cookies()
-  const supabase = createRouteHandlerClient({
-    cookies: () => cookieStore
-  });
+  const cookieStore = await cookies();
+
+  // createServerClient を使用して Supabase クライアントを生成
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () => cookieStore.getAll(),
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookieStore.set(name, value, options);
+          });
+        },
+      },
+    }
+  );
 
   let event: Stripe.Event;
 
@@ -283,4 +296,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

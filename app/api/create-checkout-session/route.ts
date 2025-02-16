@@ -1,7 +1,7 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-import Stripe from "stripe";
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error("STRIPE_SECRET_KEY is not set");
@@ -17,10 +17,25 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({
-      cookies: () => cookieStore
-    });
+    // Next.js の cookies() を利用してクッキー情報を取得
+    const cookieStore = await cookies();
+    // createServerClient を利用して Supabase クライアントを作成
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll: () => cookieStore.getAll(),
+          setAll: (cookiesToSet) => {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
+          },
+        },
+      }
+    );
+
+    // セッションの取得
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -34,7 +49,7 @@ export async function POST(request: Request) {
 
     const { planId } = await request.json();
 
-    // planIdに基づいてDBからstripe_price_idとmetadataを取得
+    // planId に基づいて DB から stripe_price_id と metadata を取得
     const { data: planData, error: planError } = await supabase
       .from("subscription_plans")
       .select("stripe_price_id, metadata")
@@ -56,7 +71,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // ユーザーのstripe_customer_idを取得
+    // ユーザーの stripe_customer_id を取得
     const { data: userData, error: userError } = await supabase
       .from("users")
       .select("stripe_customer_id")
@@ -72,7 +87,7 @@ export async function POST(request: Request) {
 
     let stripeCustomerId = userData?.stripe_customer_id;
 
-    // stripe_customer_idがない場合は新規作成
+    // stripe_customer_id がない場合は新規作成
     if (!stripeCustomerId) {
       const customer = await stripe.customers.create({
         email: session.user.email,
@@ -89,7 +104,7 @@ export async function POST(request: Request) {
         .eq("id", session.user.id);
     }
 
-    // Checkoutセッションを作成
+    // Checkout セッションを作成
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       line_items: [
@@ -117,4 +132,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

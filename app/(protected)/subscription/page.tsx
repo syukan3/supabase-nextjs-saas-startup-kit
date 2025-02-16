@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import type { SubscriptionPlan } from "@/types/subscription";
 import { getSubscriptionPlans, formatPrice } from "@/lib/subscription";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { isStripeEnabled } from '@/utils/stripe';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +34,11 @@ export default function SubscriptionPage() {
     useEffect(() => {
         async function initializeLocale() {
             try {
-                const supabase = createClientComponentClient();
+                // createBrowserClient を利用して Supabase クライアントを生成
+                const supabase = createBrowserClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                );
                 const { data: { session } } = await supabase.auth.getSession();
 
                 if (session?.user) {
@@ -149,7 +153,7 @@ export default function SubscriptionPage() {
                 {plans.map((plan) => (
                     <Card key={plan.id} className="flex flex-col">
                         <CardHeader>
-                            <CardTitle className="text-3xl">{t(`plans.${plan.name.toLowerCase()}.name`)}</CardTitle >
+                            <CardTitle className="text-3xl">{t(`plans.${plan.name.toLowerCase()}.name`)}</CardTitle>
                             <CardDescription>{t(`plans.${plan.name.toLowerCase()}.description`)}</CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow">

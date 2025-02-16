@@ -1,8 +1,12 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import type { SubscriptionPlan } from '@/types/subscription';
 
 export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
-  const supabase = createClientComponentClient();
+  // createBrowserClient を使ってクライアントサイドの Supabase クライアントを生成
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const { data: plans, error } = await supabase
     .from('subscription_plans')
@@ -29,7 +33,7 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
     throw error;
   }
 
-  // Transform the data to match the SubscriptionPlan type
+  // 取得したデータを SubscriptionPlan 型に変換
   const transformedPlans: SubscriptionPlan[] = plans?.map(plan => ({
     id: plan.id,
     name: plan.name,
