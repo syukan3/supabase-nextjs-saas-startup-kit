@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { useTranslation } from 'react-i18next'
 import { toast } from "@/hooks/use-toast"
-import { useTranslation } from 'next-i18next'
 import { submitFeedback } from './actions'
 import { useRouter } from 'next/navigation'
 
@@ -24,7 +24,7 @@ export default function FeedbackPage() {
             toast({
                 title: t('toast.error'),
                 description: t('feedback.form.error.empty_content'),
-                variant: 'destructive'
+                variant: 'destructive',
             })
             return
         }
@@ -34,33 +34,38 @@ export default function FeedbackPage() {
         try {
             const result = await submitFeedback(feedbackType, feedbackText)
 
+            // 1) 成功・失敗のレスポンスに応じてわかりやすい表示を行う
             if (!result.success) {
                 if (result.error === 'unauthorized') {
+                    // 未ログインなどのリダイレクトパターン
                     toast({
                         title: t('toast.error'),
                         description: t('common.errors.unauthorized'),
-                        variant: 'destructive'
+                        variant: 'destructive',
                     })
                     router.push('/login')
-                    return
+                } else {
+                    // それ以外のエラー
+                    console.error('[Feedback Submit Error]', result.details)
+                    toast({
+                        title: t('toast.error'),
+                        description: t('common.errors.submission'),
+                        variant: 'destructive',
+                    })
                 }
-
-                console.error('[Feedback Submit Error]', result.details)
+            } else {
+                // 成功時
                 toast({
-                    title: t('toast.error'),
-                    description: t('common.errors.submission'),
-                    variant: 'destructive'
+                    title: t('feedback.form.success.title'),
+                    description: t('feedback.form.success.description'),
+                    // variantを指定すると視覚的に目立たせたりできます（'success'など任意の名称）
+                    variant: 'success'
                 })
-                return
+
+                // フィードバック内容をリセット
+                setFeedbackText('')
+                setFeedbackType('general')
             }
-
-            toast({
-                title: t('feedback.form.success.title'),
-                description: t('feedback.form.success.description'),
-            })
-
-            setFeedbackText('')
-            setFeedbackType('general')
         } catch (err) {
             console.error('[Feedback Submit Error]', err)
             toast({
