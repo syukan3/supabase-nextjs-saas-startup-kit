@@ -1,12 +1,15 @@
 -- 通知設定テーブルの作成
 CREATE TABLE IF NOT EXISTS notification_settings (
-  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- 各フィードバックに自動生成される一意の識別子を割り当て
+  user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES users(id) ON DELETE CASCADE, -- のユーザーID。ユーザー削除時に連動して削除
   email_notifications BOOLEAN NOT NULL DEFAULT TRUE,
   marketing_emails BOOLEAN NOT NULL DEFAULT TRUE,
   push_notifications BOOLEAN NOT NULL DEFAULT FALSE,
   sms_notifications BOOLEAN NOT NULL DEFAULT FALSE,
   notification_frequency TEXT NOT NULL DEFAULT 'daily'
     CHECK (notification_frequency IN ('realtime', 'daily', 'weekly')),
+  created_by UUID REFERENCES users(id) ON DELETE CASCADE, -- レコード作成者のユーザーID（監査用）
+  updated_by UUID REFERENCES users(id) ON DELETE CASCADE, -- レコード更新者のユーザーID（監査用）
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
 );

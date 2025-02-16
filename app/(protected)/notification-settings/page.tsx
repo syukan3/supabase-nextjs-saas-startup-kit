@@ -15,9 +15,9 @@ export default function NotificationsPage() {
     const { t } = useTranslation()
     // 通知設定の状態を管理
     const [emailNotifications, setEmailNotifications] = useState(true)
-    const [pushNotifications, setPushNotifications] = useState(true)
+    const [marketingEmails, setMarketingEmails] = useState(true)
+    const [pushNotifications, setPushNotifications] = useState(false)
     const [smsNotifications, setSmsNotifications] = useState(false)
-    const [marketingEmails, setMarketingEmails] = useState(false)
     const [notificationFrequency, setNotificationFrequency] = useState('daily')
 
     // 通知設定を保存する関数
@@ -72,6 +72,14 @@ export default function NotificationsPage() {
                         />
                     </div>
                     <div className="flex items-center justify-between">
+                        <Label htmlFor="marketing-emails">{t('notifications.channels.marketing')}</Label>
+                        <Switch
+                            id="marketing-emails"
+                            checked={marketingEmails}
+                            onCheckedChange={setMarketingEmails}
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
                         <Label htmlFor="push-notifications">{t('notifications.channels.push')}</Label>
                         <Switch
                             id="push-notifications"
@@ -85,14 +93,6 @@ export default function NotificationsPage() {
                             id="sms-notifications"
                             checked={smsNotifications}
                             onCheckedChange={setSmsNotifications}
-                        />
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="marketing-emails">{t('notifications.channels.marketing')}</Label>
-                        <Switch
-                            id="marketing-emails"
-                            checked={marketingEmails}
-                            onCheckedChange={setMarketingEmails}
                         />
                     </div>
                 </CardContent>
