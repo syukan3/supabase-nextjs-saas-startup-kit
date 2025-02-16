@@ -110,7 +110,10 @@ async function upsertInvoice(
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
   const signature = request.headers.get("stripe-signature") || "";
-  const supabase = createRouteHandlerClient({ cookies });
+  const cookieStore = cookies()
+  const supabase = createRouteHandlerClient({
+    cookies: () => cookieStore
+  });
 
   let event: Stripe.Event;
 

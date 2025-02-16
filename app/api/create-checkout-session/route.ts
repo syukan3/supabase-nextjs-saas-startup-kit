@@ -17,7 +17,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 export async function POST(request: Request) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const cookieStore = cookies()
+    const supabase = createRouteHandlerClient({
+      cookies: () => cookieStore
+    });
     const {
       data: { session },
     } = await supabase.auth.getSession();

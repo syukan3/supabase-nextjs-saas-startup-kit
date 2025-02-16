@@ -8,42 +8,64 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/hooks/use-toast"
 import { useTranslation } from 'next-i18next'
+import { submitFeedback } from './actions'
+import { useRouter } from 'next/navigation'
 
 export default function FeedbackPage() {
     const { t } = useTranslation('common')
+    const router = useRouter()
     const [feedbackType, setFeedbackType] = useState('general')
     const [feedbackText, setFeedbackText] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (!feedbackText.trim()) {
+            toast({
+                title: t('toast.error'),
+                description: t('feedback.form.error.empty_content'),
+                variant: 'destructive'
+            })
+            return
+        }
+
         setIsSubmitting(true)
 
         try {
-            const res = await fetch('/api/feedback', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ feedbackType, feedbackText }),
-            })
+            const result = await submitFeedback(feedbackType, feedbackText)
 
-            if (!res.ok) {
-                throw new Error('Failed to send feedback')
+            if (!result.success) {
+                if (result.error === 'unauthorized') {
+                    toast({
+                        title: t('toast.error'),
+                        description: t('common.errors.unauthorized'),
+                        variant: 'destructive'
+                    })
+                    router.push('/login')
+                    return
+                }
+
+                console.error('[Feedback Submit Error]', result.details)
+                toast({
+                    title: t('toast.error'),
+                    description: t('common.errors.submission'),
+                    variant: 'destructive'
+                })
+                return
             }
 
-            // フィードバック送信成功
             toast({
                 title: t('feedback.form.success.title'),
                 description: t('feedback.form.success.description'),
             })
 
-            // フォームリセット
             setFeedbackText('')
             setFeedbackType('general')
         } catch (err) {
-            console.error(err)
+            console.error('[Feedback Submit Error]', err)
             toast({
                 title: t('toast.error'),
-                description: 'Failed to submit feedback',
+                description: t('common.errors.unexpected'),
                 variant: 'destructive'
             })
         } finally {
@@ -86,14 +108,14 @@ export default function FeedbackPage() {
                             <Label htmlFor="feedback">{t('feedback.form.content.label')}</Label>
                             <Textarea
                                 id="feedback"
-                                placeholder={t('feedback.form.content.placeholder') || ''}
+                                placeholder={t('feedback.form.content.placeholder')}
                                 value={feedbackText}
                                 onChange={(e) => setFeedbackText(e.target.value)}
                                 rows={5}
                             />
                         </div>
                         <Button type="submit" disabled={isSubmitting}>
-                            {t('feedback.form.submit')}
+                            {isSubmitting ? t('common.submitting') : t('common.submit')}
                         </Button>
                     </form>
                 </CardContent>
