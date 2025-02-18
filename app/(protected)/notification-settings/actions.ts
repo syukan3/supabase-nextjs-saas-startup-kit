@@ -22,6 +22,11 @@ export type NotificationSettingsResponse = {
     details?: string | string[];
 };
 
+/**
+ * 通知設定を保存するサーバーアクション
+ * @param {NotificationSettingsInput} input - 通知設定の入力データ
+ * @returns {Promise<NotificationSettingsResponse>} - 保存結果
+ */
 export async function saveNotificationSettings(
     input: NotificationSettingsInput
 ): Promise<NotificationSettingsResponse> {
@@ -49,18 +54,51 @@ export async function saveNotificationSettings(
             };
         }
 
-        // 通知設定テーブルにアップサート
-        const { error } = await supabase
+        const { data: existingSettings, error: fetchError } = await supabase
             .from('notification_settings')
-            .upsert({
-                user_id: user.id,
-                email_notifications: input.email_notifications,
-                push_notifications: input.push_notifications,
-                sms_notifications: input.sms_notifications,
-                marketing_emails: input.marketing_emails,
-                notification_frequency: input.notification_frequency,
-                updated_at: new Date().toISOString(),
-            });
+            .select('*')
+            .eq('user_id', user.id)
+            .maybeSingle();
+
+        if (fetchError) {
+            logger.error('Error fetching existing notification settings', fetchError);
+            return {
+                success: false,
+                error: 'database_error',
+                details: fetchError.message,
+            };
+        }
+
+        let error;
+        if (existingSettings) {
+            // レコードが存在する場合は更新する
+            ({ error } = await supabase
+                .from('notification_settings')
+                .update({
+                    email_notifications: input.email_notifications,
+                    push_notifications: input.push_notifications,
+                    sms_notifications: input.sms_notifications,
+                    marketing_emails: input.marketing_emails,
+                    notification_frequency: input.notification_frequency,
+                    updated_at: new Date().toISOString(),
+                })
+                .eq('user_id', user.id));
+        } else {
+            // レコードが存在しない場合は新規作成する
+            ({ error } = await supabase
+                .from('notification_settings')
+                .insert([
+                    {
+                        user_id: user.id,
+                        email_notifications: input.email_notifications,
+                        push_notifications: input.push_notifications,
+                        sms_notifications: input.sms_notifications,
+                        marketing_emails: input.marketing_emails,
+                        notification_frequency: input.notification_frequency,
+                        updated_at: new Date().toISOString(),
+                    }
+                ]));
+        }
 
         if (error) {
             logger.error('Notification settings update error', error);
@@ -82,5 +120,37 @@ export async function saveNotificationSettings(
             error: 'internal_error',
             details: error instanceof Error ? error.message : 'Unknown error occurred',
         };
+    }
+}
+
+/**
+ * ユーザーの通知設定を取得する
+ * @returns {Promise<NotificationSettingsInput | null>} - 通知設定、またはエラー時にnull
+ */
+export async function getNotificationSettings(): Promise<NotificationSettingsInput | null> {
+    try {
+        const supabase = await createClient();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            logger.error('User authentication error', userError || new Error('User not found'));
+            return null;
+        }
+
+        const { data, error } = await supabase
+            .from('notification_settings')
+            .select('email_notifications, push_notifications, sms_notifications, marketing_emails, notification_frequency')
+            .eq('user_id', user.id)
+            .maybeSingle();
+
+        if (error) {
+            logger.error('Error fetching notification settings', error);
+            return null;
+        }
+
+        return data;
+    } catch (err) {
+        logger.error('Unexpected error during fetching notification settings', err instanceof Error ? err : new Error('Unknown error'));
+        return null;
     }
 }
