@@ -12,3 +12,11 @@ Please modify the code according to the following rules:
 - Use the existing system for Tailwind CSS.
 - Use the existing system for Shadcn UI.
 - Use the existing system for React.
+- Use the existing system for Zod.
+- Logging is done using the logger.
+- When designing the database, avoid using JSONB as much as possible.
+- When designing the database, use the existing system for the audit columns.
+- When designing the database, use the existing system for the row level security.
+- When designing the database, use the existing system for the unique keys.
+- When designing the database, set up audit triggers to automatically set audit columns (created_by, updated_by, etc.) when a record is inserted or updated.
+- When designing the database, ensure to utilize the existing system for `created_by`, `updated_by`, `created_at`, and `updated_at` columns.
