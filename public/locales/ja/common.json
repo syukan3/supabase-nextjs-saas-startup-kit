@@ -286,26 +286,31 @@
     },
     "privacy_settings": {
         "title": "プライバシー設定",
+        "load_error": "プライバシー設定の読み込みに失敗しました",
+        "save_error": "プライバシー設定の保存に失敗しました",
+        "save_success": {
+            "title": "成功",
+            "description": "プライバシー設定を更新しました"
+        },
         "profile_visibility": {
-            "title": "プロフィールの可視性",
-            "description": "プロフィールの公開範囲を設定します。",
+            "title": "プロフィールの公開範囲",
+            "description": "プロフィール情報の公開範囲を設定します",
             "options": {
-                "public": "公開",
-                "private": "非公開",
-                "friends": "友達のみ"
+                "public": "公開 - 誰でもプロフィールを閲覧できます",
+                "private": "非公開 - あなたのみがプロフィールを閲覧できます",
+                "friends": "友達のみ - あなたの友達のみがプロフィールを閲覧できます"
             }
         },
         "activity_tracking": {
-            "title": "アクティビティトラッキング",
-            "description": "サービス内でのアクティビティの追跡を管理します。",
-            "enable": "アクティビティトラッキングを有効にする"
+            "title": "アクティビティの追跡",
+            "description": "プラットフォーム上でのアクティビティの追跡方法を設定します",
+            "enable": "アクティビティの追跡を有効にする"
         },
         "data_sharing": {
-            "title": "データ共有",
-            "description": "サードパーティとのデータ共有を管理します。",
-            "enable": "サードパーティとデータを共有する"
-        },
-        "save": "設定を保存"
+            "title": "データの共有",
+            "description": "第三者とのデータ共有方法を設定します",
+            "enable": "データの共有を有効にする"
+        }
     },
     "toast": {
         "profile_updated": {

@@ -49,6 +49,7 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
       created_at: plan.created_at,
       updated_at: plan.created_at,
       is_active: plan.metadata?.is_active || true,
+      status: plan.metadata?.status || 'active',
     })) || [];
 
     return transformedPlans;

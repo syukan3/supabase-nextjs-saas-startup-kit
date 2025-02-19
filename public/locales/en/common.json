@@ -282,26 +282,31 @@
     },
     "privacy_settings": {
         "title": "Privacy Settings",
+        "load_error": "Failed to load privacy settings",
+        "save_error": "Failed to save privacy settings",
+        "save_success": {
+            "title": "Success",
+            "description": "Your privacy settings have been updated"
+        },
         "profile_visibility": {
             "title": "Profile Visibility",
-            "description": "Set who can see your profile.",
+            "description": "Control who can see your profile information",
             "options": {
-                "public": "Public",
-                "private": "Private",
-                "friends": "Friends Only"
+                "public": "Public - Anyone can view your profile",
+                "private": "Private - Only you can view your profile",
+                "friends": "Friends - Only your friends can view your profile"
             }
         },
         "activity_tracking": {
             "title": "Activity Tracking",
-            "description": "Manage activity tracking within the service.",
-            "enable": "Enable Activity Tracking"
+            "description": "Control how we track your activity on our platform",
+            "enable": "Enable activity tracking"
         },
         "data_sharing": {
             "title": "Data Sharing",
-            "description": "Manage data sharing with third parties.",
-            "enable": "Share data with third parties"
-        },
-        "save": "Save Settings"
+            "description": "Control how your data is shared with third parties",
+            "enable": "Enable data sharing"
+        }
     },
     "toast": {
         "profile_updated": {
