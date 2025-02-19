@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { User } from './user';
+import { RecordStatus } from './index.d';
 
 export type SubscriptionStatus =
     | 'trialing'
@@ -59,6 +60,7 @@ export type SubscriptionPlan = {
     created_at: string;
     updated_at: string;
     is_active?: boolean;
+    status: RecordStatus;
 };
 
 export const SubscriptionPlanSchema = z.object({
@@ -81,6 +83,7 @@ export const SubscriptionPlanSchema = z.object({
     created_at: z.string(),
     updated_at: z.string(),
     is_active: z.boolean().optional(),
+    status: z.enum(['active', 'inactive', 'deleted']),
 });
 
 export type PlanComparison = {
@@ -188,6 +191,7 @@ export interface InvoiceItem {
     updated_by: string;
     created_at: string;
     updated_at: string;
+    status: RecordStatus;
 }
 
 export const InvoiceItemSchema = z.object({
@@ -205,6 +209,7 @@ export const InvoiceItemSchema = z.object({
     updated_by: z.string(),
     created_at: z.string(),
     updated_at: z.string(),
+    status: z.enum(['active', 'inactive', 'deleted']),
 });
 
 export type BillingOperation = {
@@ -296,6 +301,7 @@ export interface StripeWebhookEvent {
     updated_by: string;
     created_at: string;
     updated_at: string;
+    status: RecordStatus;
 }
 
 export const StripeWebhookEventSchema = z.object({
@@ -307,4 +313,5 @@ export const StripeWebhookEventSchema = z.object({
     updated_by: z.string(),
     created_at: z.string(),
     updated_at: z.string(),
+    status: z.enum(['active', 'inactive', 'deleted']),
 });

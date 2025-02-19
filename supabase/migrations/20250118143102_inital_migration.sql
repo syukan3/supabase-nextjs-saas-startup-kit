@@ -6,6 +6,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
     email TEXT NOT NULL UNIQUE,
     stripe_customer_id TEXT UNIQUE,
     created_by UUID REFERENCES users(id) ON DELETE CASCADE,
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS subscription_plans (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
     name TEXT NOT NULL,
     stripe_price_id TEXT NOT NULL UNIQUE,
     interval TEXT NOT NULL CHECK (interval IN ('day', 'week', 'month', 'year')),
@@ -71,6 +73,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS stripe_webhook_events (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
     event_id TEXT NOT NULL UNIQUE,              -- Stripe上の event.id (例: evt_xxx)
     event_type TEXT NOT NULL,                  -- イベントタイプ (ex: invoice.created, charge.succeeded, etc.)
     event_data JSONB,                          -- Stripe から受け取った payload 全体
@@ -118,6 +121,7 @@ CREATE TABLE IF NOT EXISTS invoices (
 --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS invoice_items (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
     invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
     description TEXT,                           -- 明細の説明文
     quantity INTEGER,

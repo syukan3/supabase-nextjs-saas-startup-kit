@@ -2,6 +2,7 @@
 -- ユーザー固有のプロフィール情報（フルネーム、表示名、アバターURL、自己紹介、ウェブサイトなど）を保存するためのテーブルです。
 CREATE TABLE IF NOT EXISTS user_profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,  -- auth.usersテーブルとの参照。ユーザー削除時に連動して削除されます。
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
     full_name TEXT,      -- ユーザーのフルネーム
     display_name TEXT,   -- ユーザーが表示する名前
     avatar_url TEXT,     -- アバター画像のURL

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { RecordStatus } from './index.d';
 
 export interface User {
     id: string;
@@ -9,6 +10,7 @@ export interface User {
     created_at: string;
     updated_at: string;
     last_login?: string;
+    status: RecordStatus;
 }
 
 export interface UserProfile {
@@ -21,6 +23,7 @@ export interface UserProfile {
     website: string;
     created_at?: string;
     updated_at?: string;
+    status: RecordStatus;
 }
 
 export const UserSchema = z.object({
@@ -32,6 +35,7 @@ export const UserSchema = z.object({
     created_at: z.string(),
     updated_at: z.string(),
     last_login: z.string().optional(),
+    status: z.enum(['active', 'inactive', 'deleted']),
 });
 
 export const UserProfileSchema = z.object({
@@ -44,6 +48,7 @@ export const UserProfileSchema = z.object({
     website: z.string(),
     created_at: z.string().optional(),
     updated_at: z.string().optional(),
+    status: z.enum(['active', 'inactive', 'deleted']),
 });
 
 export interface UserSettings {
@@ -56,6 +61,7 @@ export interface UserSettings {
         push: boolean;
         in_app: boolean;
     };
+    status: RecordStatus;
 }
 
 export const UserSettingsSchema = z.object({
@@ -68,6 +74,7 @@ export const UserSettingsSchema = z.object({
         push: z.boolean(),
         in_app: z.boolean(),
     }),
+    status: z.enum(['active', 'inactive', 'deleted']),
 });
 
 export type UserUpdateInput = Partial<Omit<User, 'id' | 'created_at' | 'updated_at'>>;

@@ -4,6 +4,7 @@
 -- ユーザーからのフィードバック情報（ID、ユーザーID、タイプ、内容、監査情報）を保存します
 CREATE TABLE IF NOT EXISTS feedback (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- 各フィードバックに自動生成される一意の識別子を割り当て
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
   user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES users(id) ON DELETE CASCADE, -- フィードバック投稿者のユーザーID。ユーザー削除時に連動して削除
   feedback_type TEXT NOT NULL CHECK (feedback_type IN ('general','bug','feature')), -- フィードバックの種類は 'general', 'bug', 'feature' のいずれかに制限
   content TEXT NOT NULL, -- フィードバックの内容を格納

@@ -1,6 +1,7 @@
 -- 通知設定テーブルの作成
 CREATE TABLE IF NOT EXISTS notification_settings (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- 各フィードバックに自動生成される一意の識別子を割り当て
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
   user_id UUID NOT NULL DEFAULT auth.uid() REFERENCES users(id) ON DELETE CASCADE, -- のユーザーID。ユーザー削除時に連動して削除
   email_notifications BOOLEAN NOT NULL DEFAULT TRUE,
   marketing_emails BOOLEAN NOT NULL DEFAULT TRUE,

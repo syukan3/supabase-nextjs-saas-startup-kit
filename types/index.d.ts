@@ -68,3 +68,5 @@ export type WithTimestamps = {
 export type DatabaseRecord = {
     id: string;
 } & WithTimestamps;
+
+export type RecordStatus = 'active' | 'inactive' | 'deleted';
