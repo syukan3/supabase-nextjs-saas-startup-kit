@@ -7,6 +7,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','deleted')),
+    user_type TEXT NOT NULL DEFAULT 'user' CHECK (user_type IN ('user', 'admin', 'staff')),
     email TEXT NOT NULL UNIQUE,
     stripe_customer_id TEXT UNIQUE,
     created_by UUID REFERENCES users(id) ON DELETE CASCADE,

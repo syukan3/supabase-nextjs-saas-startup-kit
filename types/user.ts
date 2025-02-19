@@ -4,6 +4,7 @@ import { RecordStatus } from './index.d';
 export interface User {
     id: string;
     email: string;
+    user_type: 'user' | 'admin' | 'staff';
     stripe_customer_id?: string;
     created_by: string;
     updated_by: string;
@@ -29,6 +30,7 @@ export interface UserProfile {
 export const UserSchema = z.object({
     id: z.string(),
     email: z.string().email(),
+    user_type: z.enum(['user', 'admin', 'staff']),
     stripe_customer_id: z.string().optional(),
     created_by: z.string(),
     updated_by: z.string(),
